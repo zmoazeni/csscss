@@ -8,6 +8,7 @@ class Csscss::RedundancyAnalyzer
   def redundancies
     rule_sets = CSSPool.CSS(@raw_css).rule_sets
     matches = {}
+    rule_sets.each {|rs| downcase_all_expressions(rs) }
     rule_sets.combination(2) do |rule_set1, rule_set2|
       same_decs = rule_set1.declarations.select do |dec|
         rule_set2.declarations.include?(dec)
@@ -22,6 +23,11 @@ class Csscss::RedundancyAnalyzer
     end
 
     matches.map {|rule_set, raw_matches| Match.new(RuleSet.from_csspool(rule_set), raw_matches) }
+  end
+
+  private
+  def downcase_all_expressions(rule_set)
+    rule_set.declarations.each {|dec| dec.property.downcase! }
   end
 end
 

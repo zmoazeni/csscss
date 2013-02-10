@@ -32,5 +32,23 @@ module Csscss
         )
       ]
     end
+
+    it "finds ignores case with rule_sets" do
+      css = %$
+        .foo { WIDTH: 1px }
+        .bar { width: 1px }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.should == [
+        Match.new(
+          RuleSet.new(%w(.foo), [
+            Declaration.new("width", "1px")
+          ]),
+          [
+            RuleSet.new(%w(.bar), [Declaration.new("width", "1px")])
+          ]
+        )
+      ]
+    end
   end
 end
