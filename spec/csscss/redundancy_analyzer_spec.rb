@@ -11,13 +11,13 @@ module Csscss
       $
 
       RedundancyAnalyzer.new(css).redundancies.should == {
-        Declaration.new("display", "none") => [Selector.new(%w(h1 h2)), Selector.new(%w(.foo)), Selector.new(%w(.baz))],
-        Declaration.new("position", "relative") => [Selector.new(%w(h1 h2)), Selector.new(%w(.bar))],
-        Declaration.new("width", "1px") => [Selector.new(%w(.foo)), Selector.new(%w(.bar))]
+        dec("display", "none") => [sel(%w(h1 h2)), sel(".foo"), sel(".baz")],
+        dec("position", "relative") => [sel(%w(h1 h2)), sel(".bar")],
+        dec("width", "1px") => [sel(".foo"), sel(".bar")]
       }
 
       RedundancyAnalyzer.new(css).redundancies(3).should == {
-        Declaration.new("display", "none") => [Selector.new(%w(h1 h2)), Selector.new(%w(.foo)), Selector.new(%w(.baz))]
+        dec("display", "none") => [sel(%w(h1 h2)), sel(".foo"), sel(".baz")]
       }
     end
 
@@ -28,7 +28,7 @@ module Csscss
       $
 
       RedundancyAnalyzer.new(css).redundancies.should == {
-        Declaration.new("width", "1px") => [Selector.new(%w(.foo)), Selector.new(%w(.bar))]
+        dec("width", "1px") => [sel(".foo"), sel(".bar")]
       }
     end
   end
