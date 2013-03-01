@@ -52,19 +52,19 @@ module Csscss
           @json = j
         end
 
-
         opts.on_tail("-h", "--help", "Show this message") do
-          puts opts
-          exit
+          print_help(opts)
         end
       end
       opts.parse!(argv)
 
-      if argv.empty?
-        puts opts
-        exit
-      end
+      print_help(opts) if argv.empty?
     rescue OptionParser::ParseError
+      print_help(opts)
+    end
+
+    private
+    def print_help(opts)
       puts opts
       exit
     end
