@@ -4,5 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 gem "rake", :require => false
-gem "rspec", "~> 2.12"
 gem "debugger"
+gem "m"
+gem "minitest-rg"
