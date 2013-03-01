@@ -6,9 +6,9 @@ A CSS redundancy analyzer that analyzes redundancy. My first attempt was
 in Haskell with https://github.com/zmoazeni/csscss-haskell this is the
 second in Ruby.
 
-## Installation
+## (Not ready yet) Installation
 
-Install it as:
+(Soon) Install it as:
 
     $ gem install csscss
 
