@@ -1,7 +1,6 @@
 # Csscss
 
-[![Build
-Status](https://travis-ci.org/zmoazeni/csscss.png)](https://travis-ci.org/zmoazeni/csscss)
+[![Build Status](https://travis-ci.org/zmoazeni/csscss.png?branch=master)](https://travis-ci.org/zmoazeni/csscss)
 
 A CSS redundancy analyzer that analyzes redundancy. My first attempt was
 in Haskell with https://github.com/zmoazeni/csscss-haskell this is the
