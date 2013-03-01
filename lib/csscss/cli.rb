@@ -2,6 +2,8 @@ module Csscss
   class CLI
     def initialize(argv)
       @argv = argv
+      @verbose = false
+      @minimum = 3
     end
 
     def run
@@ -57,8 +59,6 @@ module Csscss
         end
       end
       opts.parse!(argv)
-
-      @minimum ||= 3
 
       if argv.empty?
         puts opts
