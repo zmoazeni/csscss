@@ -6,8 +6,7 @@ module Csscss
       reporter = Reporter.new({
         [sel(".foo"), sel(".bar")] => [dec("width", "1px"), dec("border", "black")],
         [sel(%w(h1 h2)), sel(".foo"), sel(".baz")] => [dec("display", "none")],
-        [sel(%w(h1 h2)), sel(".bar")] => [dec("position", "relative")],
-        [sel(%w(h1 h2))] => [dec("outline", "none")]
+        [sel(%w(h1 h2)), sel(".bar")] => [dec("position", "relative")]
       })
 
      expected =<<-EXPECTED
