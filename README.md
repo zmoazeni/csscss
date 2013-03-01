@@ -1,8 +1,8 @@
 # Csscss
 
 A CSS redundancy analyzer that analyzes redundancy. My first attempt was
-in Haskell with https://github.com/zmoazeni/csscss this is the second in
-Ruby.
+in Haskell with https://github.com/zmoazeni/csscss-haskell this is the
+second in Ruby.
 
 ## Installation
 
