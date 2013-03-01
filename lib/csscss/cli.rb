@@ -25,7 +25,7 @@ module Csscss
         end
       end
 
-      puts Reporter.new(combined_redundancies).report
+      puts Reporter.new(combined_redundancies).report(@verbose)
     end
 
     def parse(argv)
