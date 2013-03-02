@@ -27,7 +27,11 @@ module Csscss
         end
       end
 
-      puts Reporter.new(combined_redundancies).report(@verbose)
+      if @json
+        puts JSONReporter.new(combined_redundancies).report
+      else
+        puts Reporter.new(combined_redundancies).report(@verbose)
+      end
     end
 
     def parse(argv)
