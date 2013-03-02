@@ -7,11 +7,27 @@ module Csscss
     def <=>(other)
       property <=> other.property
     end
+
+    def to_s
+      "#{property}: #{value}"
+    end
+
+    def inspect
+      "<#{self.class} #{to_s}>"
+    end
   end
 
   class Selector < Struct.new(:selectors)
     def <=>(other)
       selectors <=> other.selectors
+    end
+
+    def to_s
+      selectors.join(", ")
+    end
+
+    def inspect
+      "<#{self.class} #{selectors}>"
     end
   end
 end
