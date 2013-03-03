@@ -13,3 +13,4 @@ require "csscss/reporter"
 require "csscss/json_reporter"
 
 require "csscss/parser/common"
+require "csscss/parser/color"
