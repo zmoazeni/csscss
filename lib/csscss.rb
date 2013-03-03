@@ -11,3 +11,5 @@ require "csscss/types"
 require "csscss/redundancy_analyzer"
 require "csscss/reporter"
 require "csscss/json_reporter"
+
+require "csscss/parser/common"
