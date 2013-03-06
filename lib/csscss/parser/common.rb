@@ -10,11 +10,11 @@ module Csscss
       rule(:number)  { match["0-9"] }
       rule(:numbers) { number.repeat(1) }
       rule(:decimal) { numbers >> str(".").maybe >> numbers.maybe }
-      rule(:percent) { decimal.as(:percent) >> stri("%") >> space? }
+      rule(:percent) { decimal >> stri("%") >> space? }
       rule(:length)  {
         units = UNITS.map {|u| stri(u)
         }.reduce(:|)
-        (decimal.as(:decimal) >> units.as(:units)).as(:length) >> space?
+        decimal >> units >> space?
       }
       rule(:inherit) { stri("inherit") }
 

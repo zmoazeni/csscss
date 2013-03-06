@@ -16,6 +16,11 @@ module Csscss::Parser
         trans("#fff").must_equal(["background-color: #fff"])
         trans("BLACK").must_equal(["background-color: black"])
         trans("inherit").must_equal(["background-color: inherit"])
+        trans("rgb(111, 222, 333) none").must_equal([
+          "background-color: rgb(111, 222, 333)",
+          "background-image: none"
+        ])
+
         trans("inherit none").must_equal([
           "background-color: inherit",
           "background-image: none"

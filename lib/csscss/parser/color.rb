@@ -6,7 +6,7 @@ module Csscss
 
       rule(:color) { (hexcolor | rgb | color_keyword).as(:color) }
       rule(:rgb) { (rgb_with(numbers) | rgb_with(percent)).as(:rgb) }
-      rule(:hexcolor) { str("#") >> match["a-fA-F0-9"].repeat(1).as(:hexcolor) >> space? }
+      rule(:hexcolor) { (str("#") >> match["a-fA-F0-9"].repeat(1)).as(:hexcolor) >> space? }
       rule(:color_keyword) {
         colors = %w(inherit black silver gray white maroon
         red purple fuchsia green lime olive
@@ -17,11 +17,11 @@ module Csscss
       private
         def rgb_with(parser)
           symbol("rgb") >> parens do
-            parser.as(:red) >> space? >>
+            parser >> space? >>
             symbol(",") >>
-            parser.as(:green) >> space? >>
+            parser >> space? >>
             symbol(",") >>
-            parser.as(:blue) >> space?
+            parser >> space?
           end
         end
     end
