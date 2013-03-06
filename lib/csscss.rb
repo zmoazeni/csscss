@@ -14,3 +14,4 @@ require "csscss/json_reporter"
 
 require "csscss/parser/common"
 require "csscss/parser/color"
+require "csscss/parser/background"
