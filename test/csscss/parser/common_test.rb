@@ -107,5 +107,23 @@ module Csscss::Parser
         @parser.length.must_parse "1.23Pt"
       end
     end
+
+    describe "url" do
+      it "parses http" do
+        @parser.http.must_parse "foo.jpg"
+        @parser.http.must_parse 'foo\(bar\).jpg'
+        @parser.http.must_parse 'http://foo\(bar\).jpg'
+        @parser.http.must_parse 'http://foo.com/baz/\(bar\).jpg'
+      end
+
+      it "parses urls" do
+        @parser.url.must_parse "url(foo.jpg)"
+        @parser.url.must_parse "url(  foo.jpg  )"
+        @parser.url.must_parse 'url("foo.jpg")'
+        @parser.url.must_parse "url('foo.jpg')"
+        @parser.url.must_parse "url('foo.jpg'  )"
+        @parser.url.must_parse 'url(foo\(bar\).jpg)'
+      end
+    end
   end
 end

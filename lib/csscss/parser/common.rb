@@ -10,13 +10,25 @@ module Csscss
       rule(:number)  { match["0-9"] }
       rule(:numbers) { number.repeat(1) }
       rule(:decimal) { numbers >> str(".").maybe >> numbers.maybe }
-      rule(:percent) { (decimal.as(:decimal) >> stri("%")).as(:percent) >> space? }
+      rule(:percent) { decimal.as(:percent) >> stri("%") >> space? }
       rule(:length)  {
         units = UNITS.map {|u| stri(u)
         }.reduce(:|)
         (decimal.as(:decimal) >> units.as(:units)).as(:length) >> space?
       }
       rule(:inherit) { stri("inherit") }
+
+      rule(:http) {
+        (match['a-zA-Z.:/'] | str('\(') | str('\)')).repeat >> space?
+      }
+
+      rule(:url) {
+        (stri("url") >> parens do
+          (double_quoted { http } >> space?) |
+          (single_quoted { http } >> space?) |
+          http
+        end).as(:url)
+      }
 
       def stri(str)
         key_chars = str.split(//)
