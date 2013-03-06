@@ -13,12 +13,11 @@ module Csscss::Parser
       end
 
       it "converts color to shorthand" do
-        trans("#fff").must_equal(["background-color: #fff"])
-        trans("BLACK").must_equal(["background-color: black"])
-        trans("inherit").must_equal(["background-color: inherit"])
-        trans("rgb(111, 222, 333) none").must_equal([
+        trans("rgb(111, 222, 333) none repeat-x scroll").must_equal([
           "background-color: rgb(111, 222, 333)",
-          "background-image: none"
+          "background-image: none",
+          "background-repeat: repeat-x",
+          "background-attachment: scroll"
         ])
 
         trans("inherit none").must_equal([
@@ -30,6 +29,10 @@ module Csscss::Parser
           "background-color: #fff",
           "background-image: url(http://foo.com/bar.jpg)"
         ])
+
+        trans("#fff").must_equal(["background-color: #fff"])
+        trans("BLACK").must_equal(["background-color: black"])
+        trans("inherit").must_equal(["background-color: inherit"])
       end
     end
   end

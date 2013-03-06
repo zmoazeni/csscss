@@ -11,11 +11,7 @@ module Csscss
       rule(:numbers) { number.repeat(1) }
       rule(:decimal) { numbers >> str(".").maybe >> numbers.maybe }
       rule(:percent) { decimal >> stri("%") >> space? }
-      rule(:length)  {
-        units = UNITS.map {|u| stri(u)
-        }.reduce(:|)
-        decimal >> units >> space?
-      }
+      rule(:length)  { decimal >> stri_list(UNITS) >> space?  }
       rule(:inherit) { stri("inherit") }
 
       rule(:http) {
@@ -67,6 +63,13 @@ module Csscss
         between("'", "'", &block)
       end
 
+      def stri_list(list)
+        list.map {|u| stri(u) }.reduce(:|)
+      end
+
+      def symbol_list(list)
+        list.map {|u| symbol(u) }.reduce(:|)
+      end
     end
   end
 end
