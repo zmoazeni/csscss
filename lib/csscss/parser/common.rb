@@ -3,10 +3,19 @@ module Csscss
     module Common
       include Parslet
 
-      rule(:spaces)  { match["\s"].repeat }
+      UNITS = %w(px em ex in cm mm pt pc)
+
+      rule(:space)   { match["\s"].repeat(1) }
+      rule(:space?)  { space.maybe }
       rule(:number)  { match["0-9"] }
       rule(:numbers) { number.repeat(1) }
-      rule(:percent) { numbers >> (str(".") >> numbers).maybe >> symbol("%") }
+      rule(:decimal) { numbers >> str(".").maybe >> numbers.maybe }
+      rule(:percent) { (decimal.as(:decimal) >> stri("%")).as(:percent) >> space? }
+      rule(:length)  {
+        units = UNITS.map {|u| stri(u)
+        }.reduce(:|)
+        (decimal.as(:decimal) >> units.as(:units)).as(:length) >> space?
+      }
       rule(:inherit) { stri("inherit") }
 
       def stri(str)
@@ -23,9 +32,9 @@ module Csscss
 
       def symbol(s, label = nil)
         if label
-          stri(s).as(label) >> spaces
+          stri(s).as(label) >> space?
         else
-          stri(s) >> spaces
+          stri(s) >> space?
         end
       end
 
@@ -37,6 +46,15 @@ module Csscss
       def parens(&block)
         between("(", ")", &block)
       end
+
+      def double_quoted(&block)
+        between('"', '"', &block)
+      end
+
+      def single_quoted(&block)
+        between("'", "'", &block)
+      end
+
     end
   end
 end
