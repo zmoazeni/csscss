@@ -13,6 +13,7 @@ module Csscss
       rule(:percent) { decimal >> stri("%") >> space? }
       rule(:length)  { decimal >> stri_list(UNITS) >> space?  }
       rule(:inherit) { stri("inherit") }
+      rule(:eof)     { any.absent? }
 
       rule(:http) {
         (match['a-zA-Z.:/'] | str('\(') | str('\)')).repeat >> space?
