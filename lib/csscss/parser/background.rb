@@ -1,20 +1,13 @@
 module Csscss
   module Parser
     module Background
-
-      def self.parse(inputs)
-        input = Array(inputs).join(" ")
-
-        if parsed = Parser.new.try_parse(input)
-          Transformer.new.apply(parsed)
-        end
-      end
+      extend Parser::Base
 
       class Parser < Parslet::Parser
         include Color
 
         rule(:bg_color)  { color | symbol("inherit") }
-        rule(:bg_image)  { url | (symbol("none") | symbol("inherit")).as(:image_literal) }
+        rule(:bg_image)  { (url | symbol("none") | symbol("inherit")).as(:image_literal) }
         rule(:bg_repeat) { symbol_list(%w(repeat-x repeat-y repeat no-repeat inherit)).as(:repeat) }
         rule(:bg_attachment) { symbol_list(%w(scroll fixed inherit)).as(:attachment) }
 
@@ -42,11 +35,6 @@ module Csscss
           ).as(:background)
         }
         root(:background)
-
-        def try_parse(input)
-          parsed = (root | nada).parse(input)
-          parsed[:nada] ? false : parsed
-        end
       end
 
       class Transformer < Parslet::Transform
@@ -55,9 +43,7 @@ module Csscss
         rule(color:{keyword:simple(:value)}, &BG_COLOR)
         rule(color:{hexcolor:simple(:value)}, &BG_COLOR)
 
-        BG_IMG = proc {Declaration.from_parser("background-image", value) }
-        rule(image_literal:simple(:value), &BG_IMG)
-        rule(url:simple(:value), &BG_IMG)
+        rule(image_literal:simple(:value)) {Declaration.from_parser("background-image", value) }
 
         rule(:repeat => simple(:repeat)) {
           Declaration.from_parser("background-repeat", repeat)

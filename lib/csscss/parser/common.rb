@@ -21,11 +21,11 @@ module Csscss
       }
 
       rule(:url) {
-        (stri("url") >> parens do
+        stri("url") >> parens do
           (double_quoted { http } >> space?) |
           (single_quoted { http } >> space?) |
           http
-        end).as(:url)
+        end
       }
 
       def stri(str)
@@ -71,6 +71,11 @@ module Csscss
 
       def symbol_list(list)
         list.map {|u| symbol(u) }.reduce(:|)
+      end
+
+      def try_parse(input)
+        parsed = (root | nada).parse(input)
+        parsed[:nada] ? false : parsed
       end
     end
   end

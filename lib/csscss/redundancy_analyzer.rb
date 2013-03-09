@@ -87,6 +87,7 @@ module Csscss
     def shorthand_parser(property)
       case property
       when "background" then Parser::Background
+      when "list-style" then Parser::ListStyle
       end
     end
   end
