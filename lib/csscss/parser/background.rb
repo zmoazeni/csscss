@@ -1,6 +1,15 @@
 module Csscss
   module Parser
     module Background
+
+      def self.parse(inputs)
+        input = Array(inputs).join(" ")
+
+        if parsed = Parser.new.try_parse(input)
+          Transformer.new.apply(parsed)
+        end
+      end
+
       class Parser < Parslet::Parser
         include Color
 
@@ -33,33 +42,36 @@ module Csscss
           ).as(:background)
         }
         root(:background)
+
+        def try_parse(input)
+          parsed = (root | nada).parse(input)
+          parsed[:nada] ? false : parsed
+        end
       end
 
       class Transformer < Parslet::Transform
-        BG_COLOR = proc {"background-color: #{value}".downcase.strip }
+        BG_COLOR = proc {Declaration.from_parser("background-color", value) }
         rule(color:{rgb:simple(:value)}, &BG_COLOR)
         rule(color:{keyword:simple(:value)}, &BG_COLOR)
         rule(color:{hexcolor:simple(:value)}, &BG_COLOR)
 
-        BG_IMG = proc {"background-image: #{value}".downcase.strip }
+        BG_IMG = proc {Declaration.from_parser("background-image", value) }
         rule(image_literal:simple(:value), &BG_IMG)
         rule(url:simple(:value), &BG_IMG)
 
         rule(:repeat => simple(:repeat)) {
-          "background-repeat: #{repeat}".downcase.strip
+          Declaration.from_parser("background-repeat", repeat)
         }
 
         rule(:attachment => simple(:attachment)) {
-          "background-attachment: #{attachment}".downcase.strip
+          Declaration.from_parser("background-attachment", attachment)
         }
 
         rule(:position => simple(:position)) {
-          "background-position: #{position}".downcase.strip
+          Declaration.from_parser("background-position", position)
         }
 
-        rule(:background => simple(:inherit)) {
-          ["background: #{inherit}".downcase.strip]
-        }
+        rule(:background => simple(:inherit)) {[]}
 
         rule(background: {
           bg_color:simple(:color),

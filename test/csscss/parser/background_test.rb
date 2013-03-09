@@ -26,32 +26,38 @@ module Csscss::Parser
 
       it "converts shorthand rules to longhand" do
         trans("rgb(111, 222, 333) none repeat-x scroll").must_equal([
-          "background-color: rgb(111, 222, 333)",
-          "background-image: none",
-          "background-repeat: repeat-x",
-          "background-attachment: scroll"
+          dec("background-color", "rgb(111, 222, 333)"),
+          dec("background-image", "none"),
+          dec("background-repeat", "repeat-x"),
+          dec("background-attachment", "scroll")
         ])
 
         trans("inherit none inherit 10% bottom").must_equal([
-          "background-color: inherit",
-          "background-image: none",
-          "background-repeat: inherit",
-          "background-position: 10% bottom"
+          dec("background-color", "inherit"),
+          dec("background-image", "none"),
+          dec("background-repeat", "inherit"),
+          dec("background-position", "10% bottom")
         ])
 
         trans("#fff url(http://foo.com/bar.jpg) bottom").must_equal([
-          "background-color: #fff",
-          "background-image: url(http://foo.com/bar.jpg)",
-          "background-position: bottom"
+          dec("background-color", "#fff"),
+          dec("background-image", "url(http://foo.com/bar.jpg)"),
+          dec("background-position", "bottom")
         ])
 
-        trans("#fff").must_equal(["background-color: #fff"])
-        trans("BLACK").must_equal(["background-color: black"])
-        trans("inherit").must_equal(["background: inherit"])
+        trans("#fff").must_equal([dec("background-color", "#fff")])
+        trans("BLACK").must_equal([dec("background-color", "black")])
+        trans("inherit").must_equal([])
       end
 
       it "doesn't parse unknown values" do
         @parser.must_not_parse("foo")
+      end
+
+      it "tries the parse and returns false if it doesn't work" do
+        @parser.try_parse("foo").must_equal(false)
+        parsed = @parser.try_parse("black")
+        parsed[:background][:bg_color].must_equal(color:{keyword:"black"})
       end
     end
   end
