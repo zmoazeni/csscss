@@ -43,7 +43,7 @@ module CommonParserTests
   def self.included(base)
     base.send(:include, Helpers)
     base.instance_eval do
-      describe "common tests" do
+      describe "common parser tests" do
         it "parses inherit" do
           trans("inherit").must_equal([])
         end
