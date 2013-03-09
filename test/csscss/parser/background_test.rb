@@ -3,13 +3,11 @@ require "test_helper"
 module Csscss::Parser
   module Background
     describe Background do
+      include CommonParserTests
+
       before do
         @parser = Parser.new
         @trans = Transformer.new
-      end
-
-      def trans(s)
-        @trans.apply(@parser.parse(s))
       end
 
       it "parses position" do
@@ -47,11 +45,6 @@ module Csscss::Parser
 
         trans("#fff").must_equal([dec("background-color", "#fff")])
         trans("BLACK").must_equal([dec("background-color", "black")])
-        trans("inherit").must_equal([])
-      end
-
-      it "doesn't parse unknown values" do
-        @parser.wont_parse("foo")
       end
 
       it "tries the parse and returns false if it doesn't work" do

@@ -38,3 +38,26 @@ end
 
 Parslet::Atoms::DSL.infect_an_assertion :assert_parse, :must_parse, :do_not_flip
 Parslet::Atoms::DSL.infect_an_assertion :assert_not_parse, :wont_parse, :do_not_flip
+
+module CommonParserTests
+  def self.included(base)
+    base.send(:include, Helpers)
+    base.instance_eval do
+      describe "common tests" do
+        it "parses inherit" do
+          trans("inherit").must_equal([])
+        end
+
+        it "doesn't parse unknown values" do
+          @parser.wont_parse("foo")
+        end
+      end
+    end
+  end
+
+  module Helpers
+    def trans(s)
+      @trans.apply(@parser.parse(s))
+    end
+  end
+end
