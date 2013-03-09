@@ -88,6 +88,7 @@ module Csscss
       case property
       when "background" then Parser::Background
       when "list-style" then Parser::ListStyle
+      when "margin" then Parser::Margin
       end
     end
   end
