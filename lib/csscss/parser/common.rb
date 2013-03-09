@@ -14,6 +14,7 @@ module Csscss
       rule(:length)  { decimal >> stri_list(UNITS) >> space?  }
       rule(:inherit) { stri("inherit") }
       rule(:eof)     { any.absent? }
+      rule(:nada)    { any.repeat.as(:nada) }
 
       rule(:http) {
         (match['a-zA-Z.:/'] | str('\(') | str('\)')).repeat >> space?
