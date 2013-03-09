@@ -25,7 +25,7 @@ module Csscss::Parser
       end
 
       it "doesn't parse unknown values" do
-        @parser.must_not_parse("foo")
+        @parser.wont_parse("foo")
       end
 
       it "tries the parse and returns false if it doesn't work" do

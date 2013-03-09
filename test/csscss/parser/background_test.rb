@@ -20,8 +20,8 @@ module Csscss::Parser
         @parser.bg_position.must_parse("left bottom")
         @parser.bg_position.must_parse("inherit")
         @parser.bg_position.must_parse("bottom")
-        @parser.bg_position.must_not_parse("bottom left")
-        @parser.bg_position.must_not_parse("inherit bottom")
+        @parser.bg_position.wont_parse("bottom left")
+        @parser.bg_position.wont_parse("inherit bottom")
       end
 
       it "converts shorthand rules to longhand" do
@@ -51,7 +51,7 @@ module Csscss::Parser
       end
 
       it "doesn't parse unknown values" do
-        @parser.must_not_parse("foo")
+        @parser.wont_parse("foo")
       end
 
       it "tries the parse and returns false if it doesn't work" do

@@ -37,4 +37,4 @@ module MiniTest::Assertions
 end
 
 Parslet::Atoms::DSL.infect_an_assertion :assert_parse, :must_parse, :do_not_flip
-Parslet::Atoms::DSL.infect_an_assertion :assert_not_parse, :must_not_parse, :do_not_flip
+Parslet::Atoms::DSL.infect_an_assertion :assert_not_parse, :wont_parse, :do_not_flip

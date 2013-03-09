@@ -22,13 +22,13 @@ module Csscss::Parser
       it "parses rgb number color" do
         @parser.rgb.must_parse "rgb(123, 222, 444)"
         @parser.rgb.must_parse "rgb  (  123  , 222  , 444  )  "
-        @parser.rgb.must_not_parse "rgb(1aa, 222, 444)"
+        @parser.rgb.wont_parse "rgb(1aa, 222, 444)"
       end
 
       it "parses rgb percentage color" do
         @parser.rgb.must_parse "rgb(123%, 222%, 444%)"
         @parser.rgb.must_parse "rgb  (  123%  , 222%  , 444%  )  "
-        @parser.rgb.must_not_parse "rgb(1aa%, 222%, 444%)"
+        @parser.rgb.wont_parse "rgb(1aa%, 222%, 444%)"
       end
 
       it "parses hex colors" do
@@ -36,7 +36,7 @@ module Csscss::Parser
         @parser.hexcolor.must_parse "#ffffff  "
         @parser.hexcolor.must_parse "#fff "
         @parser.hexcolor.must_parse "#fFF123"
-        @parser.hexcolor.must_not_parse "fFF123"
+        @parser.hexcolor.wont_parse "fFF123"
       end
 
       it "parses keyword colors" do
