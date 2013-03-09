@@ -79,5 +79,61 @@ module Csscss
       redundancies = RedundancyAnalyzer.new(css).redundancies(3)
       redundancies[[sel(".bar"), sel(".baz")]].size.must_equal(5)
     end
+
+    it "also matches shorthand rules" do
+      css = %$
+        .foo { background-color: #fff }
+        .bar { background: #fff top }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("background-color", "#fff")]
+      })
+    end
+
+    it "keeps full shorthand together" do
+      css = %$
+        .baz { background-color: #fff }
+        .foo { background: #fff top }
+        .bar { background: #fff top }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("background", "#fff top")],
+        [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("background-color", "#fff")]
+      })
+    end
+
+    it "doesn't consolidate explicit short/longhand" do
+      css = %$
+        .foo { background-color: #fff }
+        .bar { background: #fff }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("background-color", "#fff")]
+      })
+
+      css = %$
+        .bar { background: #fff }
+        .foo { background-color: #fff }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("background-color", "#fff")]
+      })
+    end
+
+    it "3-way case consolidation" do
+      css = %$
+        .bar { background: #fff }
+        .baz { background: #fff top }
+        .foo { background-color: #fff }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("background-color", "#fff")]
+      })
+    end
   end
 end

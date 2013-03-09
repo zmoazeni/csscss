@@ -14,10 +14,24 @@ module Csscss
             exp.value.downcase!
           end
 
-          dec_key = Declaration.from_csspool(dec)
           sel = Selector.new(rule_set.selectors.map(&:to_s))
-          matches[dec_key] ||= []
-          matches[dec_key] << sel
+
+          original_dec = Declaration.from_csspool(dec)
+
+          if parser = shorthand_parser(dec.property)
+            if new_decs = parser.parse(dec.expressions)
+              new_decs.each do |new_dec|
+                # replace any non-derivatives with derivatives
+                existing = matches.delete(new_dec) || []
+                existing << sel
+                new_dec.parent = original_dec
+                matches[new_dec] = existing
+              end
+            end
+          end
+
+          matches[original_dec] ||= []
+          matches[original_dec] << sel
         end
       end
 
@@ -37,6 +51,7 @@ module Csscss
         end
       end
 
+      # combines selector keys by common declarations
       final_inverted_matches = inverted_matches.dup
       inverted_matches.to_a[0..-2].each_with_index do |(selector_group1, declarations1), index|
         inverted_matches.to_a[(index + 1)..-1].each do |selector_group2, declarations2|
@@ -50,11 +65,28 @@ module Csscss
         end
       end
 
+      # trims any derivative declarations alongside shorthand
+      final_inverted_matches.each do |selectors, declarations|
+        redundant_derivatives = declarations.select do |dec|
+          dec.derivative? && declarations.include?(dec.parent)
+        end
+        unless redundant_derivatives.empty?
+          final_inverted_matches[selectors] = declarations - redundant_derivatives
+        end
+      end
+
+      # sort hash by number of matches
       sorted_array = final_inverted_matches.sort {|(_, v1), (_, v2)| v2.size <=> v1.size }
       {}.tap do |sorted_hash|
         sorted_array.each do |key, value|
           sorted_hash[key.sort] = value.sort
         end
+      end
+    end
+
+    def shorthand_parser(property)
+      case property
+      when "background" then Parser::Background
       end
     end
   end
