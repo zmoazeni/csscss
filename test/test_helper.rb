@@ -41,8 +41,9 @@ Parslet::Atoms::DSL.infect_an_assertion :assert_not_parse, :wont_parse, :do_not_
 
 module CommonParserTests
   def self.included(base)
-    base.send(:include, Helpers)
     base.instance_eval do
+      include Helpers
+
       describe "common parser tests" do
         it "parses inherit" do
           trans("inherit").must_equal([])
