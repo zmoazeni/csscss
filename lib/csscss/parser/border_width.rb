@@ -26,7 +26,7 @@ module Csscss
 
       class Transformer < Parslet::Transform
         @property = :border_width
-        extend MultiWidthTransformer
+        extend MultiSideTransformer
 
         def self.side_declaration(side, value)
           Declaration.from_parser("border-#{side}-width", value)

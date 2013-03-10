@@ -25,7 +25,7 @@ module Csscss
 
       class Transformer < Parslet::Transform
         @property = :margin
-        extend MultiWidthTransformer
+        extend MultiSideTransformer
       end
     end
   end

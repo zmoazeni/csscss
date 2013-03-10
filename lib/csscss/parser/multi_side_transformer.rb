@@ -1,6 +1,6 @@
 module Csscss
   module Parser
-    module MultiWidthTransformer
+    module MultiSideTransformer
       def self.extended(base)
         base.instance_eval do
           extend ClassMethods
