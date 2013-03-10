@@ -4,7 +4,7 @@ module Csscss
       extend Parser::Base
 
       class Parser < Parslet::Parser
-        include Color
+        include Common
 
         rule(:border_width_side) {
           symbol_list(%w(thin medium thick inherit)) | length
