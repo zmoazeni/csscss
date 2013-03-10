@@ -38,10 +38,8 @@ module Csscss
       end
 
       class Transformer < Parslet::Transform
-        BG_COLOR = proc {Declaration.from_parser("background-color", value) }
-        rule(color:{rgb:simple(:value)}, &BG_COLOR)
-        rule(color:{keyword:simple(:value)}, &BG_COLOR)
-        rule(color:{hexcolor:simple(:value)}, &BG_COLOR)
+        @property = :background_color
+        extend Color::Transformer
 
         rule(image_literal:simple(:value)) {Declaration.from_parser("background-image", value) }
 

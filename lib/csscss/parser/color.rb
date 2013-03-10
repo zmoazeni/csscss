@@ -24,6 +24,24 @@ module Csscss
             parser >> space?
           end
         end
+
+      module Transformer
+        def self.extended(base)
+          base.instance_eval do
+            extend ClassMethods
+
+            rule(color:{rgb:simple(:value)}) {|c| transform_color(c)}
+            rule(color:{keyword:simple(:value)}) {|c| transform_color(c)}
+            rule(color:{hexcolor:simple(:value)}) {|c| transform_color(c)}
+          end
+        end
+
+        module ClassMethods
+          def transform_color(context)
+            Declaration.from_parser(@property.to_s.gsub("_", "-"), context[:value])
+          end
+        end
+      end
     end
   end
 end
