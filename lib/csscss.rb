@@ -23,4 +23,5 @@ require "csscss/parser/margin"
 require "csscss/parser/padding"
 require "csscss/parser/border_width"
 require "csscss/parser/border_color"
+require "csscss/parser/border_style"
 
