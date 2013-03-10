@@ -21,3 +21,5 @@ require "csscss/parser/background"
 require "csscss/parser/list_style"
 require "csscss/parser/margin"
 require "csscss/parser/padding"
+require "csscss/parser/border_width"
+
