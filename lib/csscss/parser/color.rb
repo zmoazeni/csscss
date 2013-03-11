@@ -42,6 +42,12 @@ module Csscss
           end
         end
       end
+
+      module PlainColorValue
+        def transform_color(context)
+          context[:value]
+        end
+      end
     end
   end
 end

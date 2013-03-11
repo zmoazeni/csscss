@@ -28,14 +28,11 @@ module Csscss
         @property = :border_color
         extend MultiSideTransformer
         extend Color::Transformer
+        extend Color::PlainColorValue
 
         class << self
           def side_declaration(side, value)
             Declaration.from_parser("border-#{side}-color", value)
-          end
-
-          def transform_color(context)
-            context[:value]
           end
         end
       end
