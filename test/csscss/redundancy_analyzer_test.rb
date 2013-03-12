@@ -135,5 +135,52 @@ module Csscss
         [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("background-color", "#fff")]
       })
     end
+
+    it "handles border and border-top matches appropriately" do
+      css = %$
+        .bar { border: 1px solid #fff }
+        .baz { border-top: 1px solid #fff }
+        .foo { border-top-width: 1px }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".baz")] => [dec("border-top", "1px solid #fff")],
+        [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-top-width", "1px")]
+      })
+    end
+
+    it "reduces border matches appropriately" do
+      #css = %$
+        #.bar { border: 1px solid #FFF }
+        #.baz { border: 1px solid #FFF }
+      #$
+
+      #RedundancyAnalyzer.new(css).redundancies.must_equal({
+        #[sel(".bar"), sel(".baz")] => [dec("border", "1px solid #fff")]
+      #})
+
+      css = %$
+        .bar { border: 4px solid #4F4F4F }
+        .baz { border: 4px solid #4F4F4F }
+        .foo { border: 4px solid #3A86CE }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".baz")] => [dec("border", "4px solid #4f4f4f")],
+        [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-style", "solid"), dec("border-width", "4px")]
+      })
+    end
+
+    # TODO: someday
+    # it "reports duplication within the same selector" do
+    #   css = %$
+    #     .bar { background: #fff top; background-color: #fff }
+    #   $
+
+    #   # TODO: need to update the reporter for this
+    #   RedundancyAnalyzer.new(css).redundancies.must_equal({
+    #     [sel(".bar")] => [dec("background-color", "#fff")]
+    #   })
+    # end
   end
 end

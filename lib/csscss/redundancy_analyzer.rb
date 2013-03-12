@@ -7,31 +7,43 @@ module Csscss
     def redundancies(minimum = nil)
       rule_sets = CSSPool.CSS(@raw_css).rule_sets
       matches = {}
+      parents = {}
       rule_sets.each do |rule_set|
         rule_set.declarations.each do |dec|
-          dec.property.downcase!
-          dec.expressions do |exp|
-            exp.value.downcase!
-          end
-
           sel = Selector.new(rule_set.selectors.map(&:to_s))
-
           original_dec = Declaration.from_csspool(dec)
 
           if parser = shorthand_parser(dec.property)
-            if new_decs = parser.parse(dec.expressions)
+            if new_decs = parser.parse(dec.property, dec.expressions)
+              if original_dec.property == "border"
+                %w(border-top border-right border-bottom border-left).each do |property|
+                  border_dec = Declaration.new(property, original_dec.value)
+                  parents[border_dec] ||= []
+                  (parents[border_dec] << original_dec).uniq!
+                  border_dec.parents = parents[border_dec]
+
+                  matches[border_dec] ||= []
+                  matches[border_dec] << sel
+                  matches[border_dec].uniq!
+                end
+              end
+
               new_decs.each do |new_dec|
                 # replace any non-derivatives with derivatives
                 existing = matches.delete(new_dec) || []
                 existing << sel
-                new_dec.parent = original_dec
+                parents[new_dec] ||= []
+                (parents[new_dec] << original_dec).uniq!
+                new_dec.parents = parents[new_dec]
                 matches[new_dec] = existing
+                matches[new_dec].uniq!
               end
             end
           end
 
           matches[original_dec] ||= []
           matches[original_dec] << sel
+          matches[original_dec].uniq!
         end
       end
 
@@ -68,12 +80,24 @@ module Csscss
       # trims any derivative declarations alongside shorthand
       final_inverted_matches.each do |selectors, declarations|
         redundant_derivatives = declarations.select do |dec|
-          dec.derivative? && declarations.include?(dec.parent)
+          dec.derivative? && declarations.detect {|dec2| dec2 > dec }
         end
         unless redundant_derivatives.empty?
           final_inverted_matches[selectors] = declarations - redundant_derivatives
         end
+
+        # border needs to be reduced even more
+        %w(width style color).each do |property|
+          decs = final_inverted_matches[selectors].select do |dec|
+            dec.derivative? && dec.property =~ /border-\w+-#{property}/
+          end
+          if decs.size == 4 && decs.map(&:value).uniq.size == 1
+            final_inverted_matches[selectors] -= decs
+            final_inverted_matches[selectors] << Declaration.new("border-#{property}", decs.first.value)
+          end
+        end
       end
+
 
       # sort hash by number of matches
       sorted_array = final_inverted_matches.sort {|(_, v1), (_, v2)| v2.size <=> v1.size }
@@ -86,10 +110,16 @@ module Csscss
 
     def shorthand_parser(property)
       case property
-      when "background" then Parser::Background
-      when "list-style" then Parser::ListStyle
-      when "margin"     then Parser::Margin
-      when "padding"    then Parser::Padding
+      when "background"   then Parser::Background
+      when "list-style"   then Parser::ListStyle
+      when "margin"       then Parser::Margin
+      when "padding"      then Parser::Padding
+      when "border"       then Parser::Border
+      when "border-width" then Parser::BorderWidth
+      when "border-style" then Parser::BorderStyle
+      when "border-color" then Parser::BorderColor
+      when "border-top", "border-right", "border-bottom", "border-left"
+        Parser::BorderSide
       end
     end
   end

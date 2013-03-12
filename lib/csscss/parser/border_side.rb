@@ -1,7 +1,26 @@
 module Csscss
   module Parser
     module BorderSide
-      extend Parser::Base
+      class << self
+        def parse(property, inputs)
+          input = Array(inputs).join(" ")
+          side = find_side(property)
+
+          if parsed = self::Parser.new(side).try_parse(input)
+            self::Transformer.new.apply(parsed)
+          end
+        end
+
+        def find_side(property)
+          case property
+          when "border-top"    then :top
+          when "border-right"  then :right
+          when "border-bottom" then :bottom
+          when "border-left"   then :left
+          else raise "Unknown property #{property}"
+          end
+        end
+      end
 
       class Parser < Parslet::Parser
         include Common

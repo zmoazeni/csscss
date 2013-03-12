@@ -1,7 +1,7 @@
 module Csscss
-  class Declaration < Struct.new(:property, :value, :parent)
+  class Declaration < Struct.new(:property, :value, :parents)
     def self.from_csspool(dec)
-      new(dec.property.to_s, dec.expressions.join(" "))
+      new(dec.property.to_s.downcase, dec.expressions.join(" ").downcase)
     end
 
     def self.from_parser(property, value)
@@ -9,13 +9,13 @@ module Csscss
     end
 
     def derivative?
-      !parent.nil?
+      !parents.nil?
     end
 
-    def without_parent
+    def without_parents
       if derivative?
         dup.tap do |duped|
-          duped.parent = nil
+          duped.parents = nil
         end
       else
         self
@@ -24,14 +24,14 @@ module Csscss
 
     def ==(other)
       if derivative?
-        without_parent == other
+        without_parents == other
       else
-        super(other.respond_to?(:without_parent) ? other.without_parent : other)
+        super(other.respond_to?(:without_parents) ? other.without_parents : other)
       end
     end
 
     def hash
-      derivative? ? without_parent.hash : super
+      derivative? ? without_parents.hash : super
     end
 
     def eql?(other)
@@ -43,7 +43,7 @@ module Csscss
     end
 
     def >(other)
-      self == other.parent
+      other.derivative? && other.parents.include?(self)
     end
 
     def <(other)
@@ -52,8 +52,8 @@ module Csscss
 
     def to_s
       base = "#{property}: #{value}"
-      if parent
-        "#{base} (parent: #{parent})"
+      if parents
+        "#{base} (parents: #{parents})"
       else
         base
       end

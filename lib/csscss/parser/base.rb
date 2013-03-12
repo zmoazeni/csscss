@@ -1,7 +1,7 @@
 module Csscss
   module Parser
     module Base
-      def parse(inputs)
+      def parse(_, inputs)
         input = Array(inputs).join(" ")
 
         if parsed = self::Parser.new.try_parse(input)

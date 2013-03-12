@@ -2,29 +2,43 @@ require "test_helper"
 
 module Csscss
   describe Declaration do
-    it "< and > checks parent" do
+    it "< and > checks parents" do
       dec1 = Declaration.new("background", "#fff")
       dec2 = Declaration.new("background", "#fff")
-      dec3 = Declaration.new("background-color", "#fff", dec1)
+      dec3 = Declaration.new("background-color", "#fff", [dec1])
       dec4 = Declaration.new("background-color", "#fff", nil)
 
       dec1.must_be :>, dec3
       dec3.must_be :<, dec1
 
-      dec1.wont_be :>, dec2
       dec1.wont_be :>, dec4
+      dec1.wont_be :>, dec2
       dec4.wont_be :>, dec1
     end
 
-    it "is a derivative if it has parent" do
+    it "checks ancestory against all parents" do
+      dec1 = Declaration.new("border", "#fff")
+      dec2 = Declaration.new("border", "#fff top")
+      dec3 = Declaration.new("border-top", "#fff", [dec1, dec2])
+
+      dec1.must_be :>, dec3
+      dec2.must_be :>, dec3
+
+      dec1.wont_be :>, dec1
+      dec2.wont_be :>, dec1
+      dec1.wont_be :>, dec2
+      dec3.wont_be :>, dec1
+    end
+
+    it "is a derivative if it has parents" do
       dec1 = Declaration.new("background", "#fff")
       dec1.wont_be :derivative?
-      Declaration.new("background-color", "#fff", dec1).must_be :derivative?
+      Declaration.new("background-color", "#fff", [dec1]).must_be :derivative?
     end
 
     it "ignores parents when checking equality" do
       dec1 = Declaration.new("background", "#fff")
-      dec2 = Declaration.new("background-color", "#fff", dec1)
+      dec2 = Declaration.new("background-color", "#fff", [dec1])
       dec3 = Declaration.new("background-color", "#fff", nil)
 
       dec1.wont_equal dec2
@@ -44,7 +58,7 @@ module Csscss
 
     it "derivatives are handled correctly in a hash" do
       dec1 = Declaration.new("background", "#fff")
-      dec2 = Declaration.new("background-color", "#fff", dec1)
+      dec2 = Declaration.new("background-color", "#fff", [dec1])
       dec3 = Declaration.new("background-color", "#fff", nil)
 
       h = {}
