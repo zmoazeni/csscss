@@ -5,16 +5,17 @@ module Csscss
 
       UNITS = %w(px em ex in cm mm pt pc)
 
-      rule(:space)   { match["\s"].repeat(1) }
-      rule(:space?)  { space.maybe }
-      rule(:number)  { match["0-9"] }
-      rule(:numbers) { number.repeat(1) }
-      rule(:decimal) { numbers >> str(".").maybe >> numbers.maybe }
-      rule(:percent) { decimal >> stri("%") >> space? }
-      rule(:length)  { decimal >> stri_list(UNITS) >> space?  }
-      rule(:inherit) { stri("inherit") }
-      rule(:eof)     { any.absent? }
-      rule(:nada)    { any.repeat.as(:nada) }
+      rule(:space)      { match["\s"].repeat(1) }
+      rule(:space?)     { space.maybe }
+      rule(:number)     { match["0-9"] }
+      rule(:numbers)    { number.repeat(1) }
+      rule(:decimal)    { numbers >> str(".").maybe >> numbers.maybe }
+      rule(:percent)    { decimal >> stri("%") >> space? }
+      rule(:length)     { decimal >> stri_list(UNITS) >> space?  }
+      rule(:identifier) { match["a-zA-Z"].repeat(1) }
+      rule(:inherit)    { stri("inherit") }
+      rule(:eof)        { any.absent? }
+      rule(:nada)       { any.repeat.as(:nada) }
 
       rule(:http) {
         (match['a-zA-Z.:/'] | str('\(') | str('\)')).repeat >> space?
@@ -22,8 +23,7 @@ module Csscss
 
       rule(:url) {
         stri("url") >> parens do
-          (double_quoted { http } >> space?) |
-          (single_quoted { http } >> space?) |
+          (any_quoted { http } >> space?) |
           http
         end
       }
@@ -63,6 +63,10 @@ module Csscss
 
       def single_quoted(&block)
         between("'", "'", &block)
+      end
+
+      def any_quoted(&block)
+        double_quoted(&block) | single_quoted(&block)
       end
 
       def stri_list(list)

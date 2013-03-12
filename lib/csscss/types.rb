@@ -4,8 +4,10 @@ module Csscss
       new(dec.property.to_s.downcase, dec.expressions.join(" ").downcase)
     end
 
-    def self.from_parser(property, value)
-      new(property.to_s, value.to_s.downcase.strip)
+    def self.from_parser(property, value, clean = true)
+      value = value.to_s
+      value = value.downcase if clean
+      new(property.to_s, value.strip)
     end
 
     def derivative?

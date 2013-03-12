@@ -119,6 +119,7 @@ module Csscss
       when "border-style" then Parser::BorderStyle
       when "border-color" then Parser::BorderColor
       when "outline"      then Parser::Outline
+      when "font"         then Parser::Font
       when "border-top", "border-right", "border-bottom", "border-left"
         Parser::BorderSide
       end

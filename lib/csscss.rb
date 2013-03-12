@@ -27,4 +27,5 @@ require "csscss/parser/border_style"
 require "csscss/parser/border_side"
 require "csscss/parser/border"
 require "csscss/parser/outline"
+require "csscss/parser/font"
 
