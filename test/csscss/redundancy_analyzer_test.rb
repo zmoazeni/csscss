@@ -171,6 +171,19 @@ module Csscss
       })
     end
 
+    it "reduces padding and margin" do
+      css = %$
+        .bar { padding: 4px; margin: 5px }
+        .baz { padding-bottom: 4px}
+        .foo { margin-right: 5px }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".baz")] => [dec("padding-bottom", "4px")],
+        [sel(".bar"), sel(".foo")] => [dec("margin-right", "5px")]
+      })
+    end
+
     # TODO: someday
     # it "reports duplication within the same selector" do
     #   css = %$

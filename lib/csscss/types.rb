@@ -53,16 +53,15 @@ module Csscss
     end
 
     def to_s
-      base = "#{property}: #{value}"
-      if parents
-        "#{base} (parents: #{parents})"
-      else
-        base
-      end
+      "#{property}: #{value}"
     end
 
     def inspect
-      "<#{self.class} #{to_s}>"
+      if parents
+        "<#{self.class} #{to_s} (parents: #{parents})>"
+      else
+        "<#{self.class} #{to_s}>"
+      end
     end
   end
 
