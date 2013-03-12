@@ -150,14 +150,14 @@ module Csscss
     end
 
     it "reduces border matches appropriately" do
-      #css = %$
-        #.bar { border: 1px solid #FFF }
-        #.baz { border: 1px solid #FFF }
-      #$
+      css = %$
+        .bar { border: 1px solid #FFF }
+        .baz { border: 1px solid #FFF }
+      $
 
-      #RedundancyAnalyzer.new(css).redundancies.must_equal({
-        #[sel(".bar"), sel(".baz")] => [dec("border", "1px solid #fff")]
-      #})
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".baz")] => [dec("border", "1px solid #fff")]
+      })
 
       css = %$
         .bar { border: 4px solid #4F4F4F }
