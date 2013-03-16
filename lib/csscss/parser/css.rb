@@ -3,6 +3,12 @@ module Csscss
     # This is heavily based on the haskell css parser on
     # https://github.com/yesodweb/css-text/blob/add139487c38b68845246449d01c13dbcebac39d/Text/CSS/Parse.hs
     module Css
+      class << self
+        def parse(source)
+          Transformer.new.apply(Parser.new.parse(source))
+        end
+      end
+
       class Parser < Parslet::Parser
         include Common
 

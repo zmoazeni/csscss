@@ -2,7 +2,6 @@ PATH
   remote: .
   specs:
     csscss (0.0.1)
-      csspool (~> 3.0)
       parslet (~> 1.5)
 
 GEM
@@ -10,7 +9,6 @@ GEM
   specs:
     blankslate (2.1.2.4)
     columnize (0.3.6)
-    csspool (3.0.2)
     debugger (1.2.2)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.1.1)

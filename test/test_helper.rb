@@ -7,9 +7,9 @@ require "debugger"
 
 require "csscss"
 
-MiniTest::Spec.add_setup_hook do
+module TypeHelpers
   def sel(s)
-    Csscss::Selector.new(Array(s))
+    Csscss::Selector.new(s)
   end
 
   def dec(p, v)
@@ -43,6 +43,7 @@ module CommonParserTests
   def self.included(base)
     base.instance_eval do
       include Helpers
+      include TypeHelpers
 
       describe "common parser tests" do
         it "parses inherit" do

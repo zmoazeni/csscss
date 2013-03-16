@@ -2,6 +2,8 @@ require "test_helper"
 
 module Csscss
   describe RedundancyAnalyzer do
+    include TypeHelpers
+
     it "finds and trims redundant rule_sets" do
       css = %$
         h1, h2 { display: none; position: relative; outline:none}
@@ -11,17 +13,17 @@ module Csscss
       $
 
       RedundancyAnalyzer.new(css).redundancies.must_equal({
-        [sel(".bar"), sel(%w(h1 h2))] => [dec("outline", "none"), dec("position", "relative")],
+        [sel(".bar"), sel("h1, h2")] => [dec("outline", "none"), dec("position", "relative")],
         [sel(".bar"), sel(".foo")] => [dec("width", "1px")],
-        [sel(".baz"), sel(".foo"), sel(%w(h1 h2))] => [dec("display", "none")]
+        [sel(".baz"), sel(".foo"), sel("h1, h2")] => [dec("display", "none")]
       })
 
       RedundancyAnalyzer.new(css).redundancies.first.must_equal [
-        [sel(".bar"), sel(%w(h1 h2))] , [dec("outline", "none"), dec("position", "relative")]
+        [sel(".bar"), sel("h1, h2")] , [dec("outline", "none"), dec("position", "relative")]
       ]
 
       RedundancyAnalyzer.new(css).redundancies(2).must_equal({
-        [sel(".bar"), sel(%w(h1 h2))] => [dec("outline", "none"), dec("position", "relative")]
+        [sel(".bar"), sel("h1, h2")] => [dec("outline", "none"), dec("position", "relative")]
       })
     end
 

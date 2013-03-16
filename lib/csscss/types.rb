@@ -6,8 +6,12 @@ module Csscss
 
     def self.from_parser(property, value, clean = true)
       value = value.to_s
-      value = value.downcase if clean
-      new(property.to_s, value.strip)
+      property = property.to_s
+      if clean
+        value = value.downcase
+        property = property.downcase
+      end
+      new(property, value.strip)
     end
 
     def derivative?
@@ -67,7 +71,7 @@ module Csscss
 
   class Selector < Struct.new(:selectors)
     def self.from_parser(selectors)
-      new(selectors.to_s.split(",").map(&:strip))
+      new(selectors.to_s.strip)
     end
 
     def <=>(other)
@@ -75,7 +79,7 @@ module Csscss
     end
 
     def to_s
-      selectors.join(", ")
+      selectors
     end
 
     def inspect
@@ -83,6 +87,6 @@ module Csscss
     end
   end
 
-  class Ruleset < Struct.new(:selector, :declarations)
+  class Ruleset < Struct.new(:selectors, :declarations)
   end
 end

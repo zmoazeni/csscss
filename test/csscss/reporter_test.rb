@@ -2,11 +2,13 @@ require "test_helper"
 
 module Csscss
   describe Reporter do
+    include TypeHelpers
+
     it "formats string result" do
       reporter = Reporter.new({
         [sel(".foo"), sel(".bar")] => [dec("width", "1px"), dec("border", "black")],
-        [sel(%w(h1 h2)), sel(".foo"), sel(".baz")] => [dec("display", "none")],
-        [sel(%w(h1 h2)), sel(".bar")] => [dec("position", "relative")]
+        [sel("h1, h2"), sel(".foo"), sel(".baz")] => [dec("display", "none")],
+        [sel("h1, h2"), sel(".bar")] => [dec("position", "relative")]
       })
 
      expected =<<-EXPECTED

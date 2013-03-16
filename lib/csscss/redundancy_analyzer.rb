@@ -5,21 +5,20 @@ module Csscss
     end
 
     def redundancies(minimum = nil)
-      rule_sets = CSSPool.CSS(@raw_css).rule_sets
+      rule_sets = Parser::Css.parse(@raw_css)
       matches = {}
       parents = {}
       rule_sets.each do |rule_set|
         rule_set.declarations.each do |dec|
-          sel = Selector.new(rule_set.selectors.map(&:to_s))
-          original_dec = Declaration.from_csspool(dec)
+          sel = rule_set.selectors
 
           if parser = shorthand_parser(dec.property)
-            if new_decs = parser.parse(dec.property, dec.expressions)
-              if original_dec.property == "border"
+            if new_decs = parser.parse(dec.property, dec.value)
+              if dec.property == "border"
                 %w(border-top border-right border-bottom border-left).each do |property|
-                  border_dec = Declaration.new(property, original_dec.value)
+                  border_dec = Declaration.new(property, dec.value)
                   parents[border_dec] ||= []
-                  (parents[border_dec] << original_dec).uniq!
+                  (parents[border_dec] << dec).uniq!
                   border_dec.parents = parents[border_dec]
 
                   matches[border_dec] ||= []
@@ -33,7 +32,7 @@ module Csscss
                 existing = matches.delete(new_dec) || []
                 existing << sel
                 parents[new_dec] ||= []
-                (parents[new_dec] << original_dec).uniq!
+                (parents[new_dec] << dec).uniq!
                 new_dec.parents = parents[new_dec]
                 matches[new_dec] = existing
                 matches[new_dec].uniq!
@@ -41,9 +40,9 @@ module Csscss
             end
           end
 
-          matches[original_dec] ||= []
-          matches[original_dec] << sel
-          matches[original_dec].uniq!
+          matches[dec] ||= []
+          matches[dec] << sel
+          matches[dec].uniq!
         end
       end
 
@@ -108,6 +107,7 @@ module Csscss
       end
     end
 
+    private
     def shorthand_parser(property)
       case property
       when "background"   then Parser::Background

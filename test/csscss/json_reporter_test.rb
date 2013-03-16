@@ -2,11 +2,13 @@ require "test_helper"
 
 module Csscss
   describe JSONReporter do
+    include TypeHelpers
+
     it "formats json result" do
       reporter = JSONReporter.new({
         [sel(".foo"), sel(".bar")] => [dec("width", "1px"), dec("border", "black")],
-        [sel(%w(h1 h2)), sel(".foo"), sel(".baz")] => [dec("display", "none")],
-        [sel(%w(h1 h2)), sel(".bar")] => [dec("position", "relative")]
+        [sel("h1, h2"), sel(".foo"), sel(".baz")] => [dec("display", "none")],
+        [sel("h1, h2"), sel(".bar")] => [dec("position", "relative")]
       })
 
       expected = [

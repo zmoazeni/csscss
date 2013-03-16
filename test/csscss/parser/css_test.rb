@@ -4,6 +4,7 @@ module Csscss::Parser
   module Css
     describe self do
       include CommonParserTests::Helpers
+      include TypeHelpers
 
       before do
         @parser = Parser.new
@@ -42,7 +43,7 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel(%w(h1 h2)), [dec("display", "none"), dec("position", "relative"), dec("outline", "none")]),
+          rs(sel("h1, h2"), [dec("display", "none"), dec("position", "relative"), dec("outline", "none")]),
           rs(sel(".foo"), [dec("display", "none"), dec("width", "1px")]),
           rs(sel(".bar"), [dec("border", "1px solid black")]),
           rs(sel(".baz"), [dec("background-color", "black"), dec("background-style", "solid")])
