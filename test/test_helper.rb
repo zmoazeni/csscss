@@ -16,8 +16,8 @@ MiniTest::Spec.add_setup_hook do
     Csscss::Declaration.new(p, v)
   end
 
-  def cmatch(selectors, decs)
-    Csscss::Match.new(selectors, decs)
+  def rs(selectors, decs)
+    Csscss::Ruleset.new(selectors, decs)
   end
 end
 

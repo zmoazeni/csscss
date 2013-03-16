@@ -66,6 +66,10 @@ module Csscss
   end
 
   class Selector < Struct.new(:selectors)
+    def self.from_parser(selectors)
+      new(selectors.to_s.split(",").map(&:strip))
+    end
+
     def <=>(other)
       selectors <=> other.selectors
     end
@@ -77,5 +81,8 @@ module Csscss
     def inspect
       "<#{self.class} #{selectors}>"
     end
+  end
+
+  class Ruleset < Struct.new(:selector, :declarations)
   end
 end

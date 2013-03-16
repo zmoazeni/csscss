@@ -17,6 +17,7 @@ require "csscss/parser/color"
 require "csscss/parser/base"
 require "csscss/parser/multi_side_transformer"
 
+require "csscss/parser/css"
 require "csscss/parser/background"
 require "csscss/parser/list_style"
 require "csscss/parser/margin"
