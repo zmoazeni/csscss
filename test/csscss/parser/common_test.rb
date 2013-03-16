@@ -23,6 +23,7 @@ module Csscss::Parser
       it "parses series of spaces" do
         @parser.space.must_parse " "
         @parser.space.must_parse "  "
+        @parser.space.must_parse "\n"
         @parser.space.wont_parse "  a"
 
         @parser.space.wont_parse ""

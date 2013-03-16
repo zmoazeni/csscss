@@ -5,7 +5,7 @@ module Csscss
 
       UNITS = %w(px em ex in cm mm pt pc)
 
-      rule(:space)      { match["\s"].repeat(1) }
+      rule(:space)      { match['\s'].repeat(1) }
       rule(:space?)     { space.maybe }
       rule(:number)     { match["0-9"] }
       rule(:numbers)    { number.repeat(1) }
