@@ -12,16 +12,10 @@ module Csscss
       class Parser < Parslet::Parser
         include Common
 
-        #def comment(&block)
-          #between("/*", "*/", &block)
-        #end
-
-
         rule(:asterisk) { match('\*') }
 
-
         rule(:end_comment) {
-          match['^\*'].repeat >> asterisk >> (match("/") | end_comment)
+          match['^\*'].repeat >> asterisk >> (match('/') | end_comment)
         }
 
         rule(:comment) {
