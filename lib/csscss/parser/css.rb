@@ -27,35 +27,50 @@ module Csscss
         rule(:attribute) {
           css_space? >>
           match["^:{}"].repeat(1).as(:property) >>
-          match(":") >>
+          str(":") >>
           css_space? >>
           match["^;}"].repeat(1).as(:value)
         }
 
         rule(:attributes) {
           attribute >>
-          match(";").maybe >>
+          str(";").maybe >>
           css_space?
         }
 
-        rule(:block) {
+        rule(:ruleset) {
           (
             css_space? >>
-            match["^{"].repeat(1).as(:selector) >>
-            match("{") >>
+            match["^{}"].repeat(1).as(:selector) >>
+            str("{") >>
             attributes.repeat(0).as(:properties) >>
             css_space? >>
-            match("}") >>
+            str("}") >>
             css_space?
-          ).as(:block)
+          ).as(:ruleset)
         }
 
-        rule(:blocks) { block.repeat(0) }
+        rule(:nested_ruleset) {
+          css_space? >>
+          str("@") >>
+          match["^{}"].repeat(1) >>
+          str("{") >>
+          ruleset.repeat(0) >>
+          css_space? >>
+          str("}") >>
+          css_space?
+        }
+
+        rule(:blocks) { (nested_ruleset.as(:nested) | ruleset).repeat(0).as(:blocks) }
         root(:blocks)
       end
 
       class Transformer < Parslet::Transform
-        rule(block: {
+        rule(nested: sequence(:rulesets)) {
+          rulesets
+        }
+
+        rule(ruleset: {
           selector: simple(:selector),
           properties: sequence(:properties)
         }) {
@@ -67,6 +82,10 @@ module Csscss
           value: simple(:value)
         }) {
           Declaration.from_parser(property, value)
+        }
+
+        rule(blocks: subtree(:rulesets)) {
+          rulesets.flatten
         }
       end
     end

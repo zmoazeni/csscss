@@ -64,6 +64,31 @@ module Csscss::Parser
           rs(sel(".baz"), [dec("background", "white /* sdflk */")])
         ])
       end
+
+      it "recognizes media queries" do
+        css = %$
+          @media only screen {
+            /* some comment */
+            #foo {
+              background-color: black;
+            }
+
+            #bar {
+              display: none;
+            }
+          }
+
+          h1 {
+            outline: 1px;
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel("#foo"), [dec("background-color", "black")]),
+          rs(sel("#bar"), [dec("display", "none")]),
+          rs(sel("h1"), [dec("outline", "1px")])
+        ])
+      end
     end
   end
 end
