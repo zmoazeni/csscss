@@ -32,6 +32,11 @@ module Csscss
       else
         puts Reporter.new(combined_redundancies).report(@verbose)
       end
+
+    rescue Parslet::ParseFailed => e
+      puts "Had a problem parsing the css"
+      puts e.cause.ascii_tree
+      exit 1
     end
 
     def parse(argv)
