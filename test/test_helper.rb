@@ -60,6 +60,9 @@ module CommonParserTests
   module Helpers
     def trans(s)
       @trans.apply(@parser.parse(s))
+    rescue Parslet::ParseFailed => e
+      puts e.cause.ascii_tree
+      raise e
     end
   end
 end
