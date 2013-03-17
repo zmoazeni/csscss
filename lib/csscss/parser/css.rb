@@ -12,14 +12,12 @@ module Csscss
       class Parser < Parslet::Parser
         include Common
 
-        rule(:asterisk) { match('\*') }
-
         rule(:end_comment) {
-          match['^\*'].repeat >> asterisk >> (match('/') | end_comment)
+          match['^\\*'].repeat >> str("*") >> (match('/') | end_comment)
         }
 
         rule(:comment) {
-          (space? >> match('/') >> asterisk >> end_comment >> space?) | space?
+          (space? >> str('/*') >> end_comment >> space?) | space?
         }
 
         rule(:css_space?) {
