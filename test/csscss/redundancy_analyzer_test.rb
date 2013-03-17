@@ -171,6 +171,10 @@ module Csscss
         [sel(".bar"), sel(".baz")] => [dec("border", "4px solid #4f4f4f")],
         [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-style", "solid"), dec("border-width", "4px")]
       })
+
+      RedundancyAnalyzer.new(css).redundancies(2).must_equal({
+        [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-style", "solid"), dec("border-width", "4px")]
+      })
     end
 
     it "reduces padding and margin" do

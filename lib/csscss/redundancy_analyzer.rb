@@ -56,12 +56,6 @@ module Csscss
         end
       end
 
-      if minimum
-        inverted_matches.delete_if do |key, declarations|
-          declarations.size < minimum
-        end
-      end
-
       # combines selector keys by common declarations
       final_inverted_matches = inverted_matches.dup
       inverted_matches.to_a[0..-2].each_with_index do |(selector_group1, declarations1), index|
@@ -97,6 +91,11 @@ module Csscss
         end
       end
 
+      if minimum
+        final_inverted_matches.delete_if do |key, declarations|
+          declarations.size < minimum
+        end
+      end
 
       # sort hash by number of matches
       sorted_array = final_inverted_matches.sort {|(_, v1), (_, v2)| v2.size <=> v1.size }
