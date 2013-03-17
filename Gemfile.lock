@@ -25,6 +25,7 @@ GEM
     parslet (1.5.0)
       blankslate (~> 2.0)
     rake (10.0.3)
+    ruby-prof (0.13.0)
 
 PLATFORMS
   ruby
@@ -36,3 +37,4 @@ DEPENDENCIES
   minitest
   minitest-rg
   rake
+  ruby-prof

@@ -9,3 +9,5 @@ gem "debugger"
 gem "minitest"
 gem "m"
 gem "minitest-rg"
+
+gem "ruby-prof"
