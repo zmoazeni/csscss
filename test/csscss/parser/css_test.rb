@@ -22,11 +22,16 @@ module Csscss::Parser
         end
 
         it "parses comments" do
-          @parser.comment.must_parse "/* foo */"
-          @parser.comment.must_parse %$
+          @parser.css_space?.must_parse "/* foo */"
+          @parser.css_space?.must_parse %$
           /* foo
            * bar
            */
+          $
+
+          @parser.css_space?.must_parse %$
+            /* foo */
+            /* bar */
           $
         end
       end
@@ -62,6 +67,25 @@ module Csscss::Parser
         trans(css).must_equal([
           rs(sel(".bar"), [dec("border", "1px solid black /* sdflk */")]),
           rs(sel(".baz"), [dec("background", "white /* sdflk */")])
+        ])
+      end
+
+      it "skips rules that are commented out" do
+        css = %$
+          /*
+             bar { border: 1px solid black }
+          */
+
+          /* foo */
+          .baz {
+            background: white;
+            /* bar */
+            border: 1px;
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel(".baz"), [dec("background", "white"), dec("border", "1px")])
         ])
       end
 

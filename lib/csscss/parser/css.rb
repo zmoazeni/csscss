@@ -17,11 +17,11 @@ module Csscss
         }
 
         rule(:comment) {
-          (space? >> str('/*') >> end_comment >> space?) | space?
+          space? >> str('/*') >> end_comment >> space?
         }
 
         rule(:css_space?) {
-          comment | space?
+          comment.repeat(1) | space?
         }
 
         rule(:attribute) {
