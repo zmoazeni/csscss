@@ -29,15 +29,15 @@ module Csscss
     end
 
     def ==(other)
-      if derivative?
-        without_parents == other
+      if other.respond_to?(:property) && other.respond_to?(:value)
+        property == other.property && value == other.value
       else
-        super(other.respond_to?(:without_parents) ? other.without_parents : other)
+        false
       end
     end
 
     def hash
-      derivative? ? without_parents.hash : super
+      [property, value].hash
     end
 
     def eql?(other)
