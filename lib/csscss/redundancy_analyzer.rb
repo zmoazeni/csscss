@@ -56,6 +56,34 @@ module Csscss
         end
       end
 
+
+      # trims any derivative declarations alongside shorthand
+      inverted_matches.each do |selectors, declarations|
+        redundant_derivatives = declarations.select do |dec|
+          dec.derivative? && declarations.detect {|dec2| dec2 > dec }
+        end
+        unless redundant_derivatives.empty?
+          inverted_matches[selectors] = declarations - redundant_derivatives
+        end
+
+        # border needs to be reduced even more
+        %w(width style color).each do |property|
+          decs = inverted_matches[selectors].select do |dec|
+            dec.derivative? && dec.property =~ /border-\w+-#{property}/
+          end
+          if decs.size == 4 && decs.map(&:value).uniq.size == 1
+            inverted_matches[selectors] -= decs
+            inverted_matches[selectors] << Declaration.new("border-#{property}", decs.first.value)
+          end
+        end
+      end
+
+      if minimum
+        inverted_matches.delete_if do |key, declarations|
+          declarations.size < minimum
+        end
+      end
+
       # combines selector keys by common declarations
       final_inverted_matches = inverted_matches.dup
       inverted_matches.to_a[0..-2].each_with_index do |(selector_group1, declarations1), index|
@@ -67,33 +95,6 @@ module Csscss
             final_inverted_matches[key] ||= []
             final_inverted_matches[key].concat(declarations1 + declarations2).uniq!
           end
-        end
-      end
-
-      # trims any derivative declarations alongside shorthand
-      final_inverted_matches.each do |selectors, declarations|
-        redundant_derivatives = declarations.select do |dec|
-          dec.derivative? && declarations.detect {|dec2| dec2 > dec }
-        end
-        unless redundant_derivatives.empty?
-          final_inverted_matches[selectors] = declarations - redundant_derivatives
-        end
-
-        # border needs to be reduced even more
-        %w(width style color).each do |property|
-          decs = final_inverted_matches[selectors].select do |dec|
-            dec.derivative? && dec.property =~ /border-\w+-#{property}/
-          end
-          if decs.size == 4 && decs.map(&:value).uniq.size == 1
-            final_inverted_matches[selectors] -= decs
-            final_inverted_matches[selectors] << Declaration.new("border-#{property}", decs.first.value)
-          end
-        end
-      end
-
-      if minimum
-        final_inverted_matches.delete_if do |key, declarations|
-          declarations.size < minimum
         end
       end
 
