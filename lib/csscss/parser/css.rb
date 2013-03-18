@@ -12,12 +12,8 @@ module Csscss
       class Parser < Parslet::Parser
         include Common
 
-        rule(:end_comment) {
-          match['^\\*'].repeat >> str("*") >> (match('/') | end_comment)
-        }
-
         rule(:comment) {
-          space? >> str('/*') >> end_comment >> space?
+          space? >> str('/*') >> (str('*/').absent? >> any).repeat >> str('*/') >> space?
         }
 
         rule(:css_space?) {
