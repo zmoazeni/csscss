@@ -21,49 +21,50 @@ module Csscss
         }
 
         rule(:attribute) {
-          css_space? >>
           match["^:{}"].repeat(1).as(:property) >>
           str(":") >>
-          css_space? >>
-          match["^;}"].repeat(1).as(:value)
-        }
-
-        rule(:attributes) {
-          attribute >>
+          match["^;}"].repeat(1).as(:value) >>
           str(";").maybe >>
-          css_space?
+          space?
         }
 
         rule(:ruleset) {
           (
-            css_space? >>
             match["^{}"].repeat(1).as(:selector) >>
             str("{") >>
-            attributes.repeat(0).as(:properties) >>
-            css_space? >>
+            space? >>
+            (comment | attribute).repeat(0).as(:properties) >>
             str("}") >>
-            css_space?
+            space?
           ).as(:ruleset)
         }
 
         rule(:nested_ruleset) {
-          css_space? >>
-          str("@") >>
-          match["^{}"].repeat(1) >>
-          str("{") >>
-          ruleset.repeat(0) >>
-          css_space? >>
-          str("}") >>
-          css_space?
+          (
+            str("@") >>
+            match["^{}"].repeat(1) >>
+            str("{") >>
+            (comment | ruleset).repeat(0) >>
+            str("}") >>
+            space?
+          ).as(:nested_ruleset)
         }
 
-        rule(:blocks) { (nested_ruleset.as(:nested) | ruleset).repeat(0).as(:blocks) }
+        #rule(:blocks) { (nested_ruleset.as(:nested) | ruleset).repeat(0).as(:blocks) }
+        rule(:blocks) {
+          space? >> (comment.as(:comment) | nested_ruleset | ruleset).repeat(1).as(:blocks) >> space?
+        }
+
         root(:blocks)
       end
 
       class Transformer < Parslet::Transform
-        rule(nested: sequence(:rulesets)) {
+        rule(nested_ruleset: sequence(:rulesets)) {
           rulesets
+        }
+
+        rule(comment: simple(:comment)) {
+          []
         }
 
         rule(ruleset: {
@@ -80,8 +81,8 @@ module Csscss
           Declaration.from_parser(property, value)
         }
 
-        rule(blocks: subtree(:rulesets)) {
-          rulesets.flatten
+        rule(blocks: subtree(:rulesets)) {|context|
+          context[:rulesets].flatten
         }
       end
     end

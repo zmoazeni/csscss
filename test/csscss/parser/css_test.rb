@@ -13,12 +13,13 @@ module Csscss::Parser
 
       describe "parsing" do
         it "parses css" do
-          @parser.must_parse ""
           @parser.must_parse "h1 { display: none }"
           @parser.must_parse "\nh1 { display: none; }"
           @parser.must_parse %$
             .bar { border: 1px solid black }
           $
+
+          @parser.wont_parse ""
         end
 
         it "parses comments" do
