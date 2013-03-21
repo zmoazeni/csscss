@@ -1,5 +1,4 @@
 #! /usr/bin/env ruby
 
-require "debugger"
 require "csscss"
 Csscss::CLI.run(ARGV)
