@@ -11,3 +11,4 @@ gem "m"
 gem "minitest-rg"
 
 gem "ruby-prof"
+gem "parslet", :git => "git@github.com:zmoazeni/parslet.git", :branch => "optimized-multibyte-parsing"
