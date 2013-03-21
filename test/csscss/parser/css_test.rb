@@ -90,6 +90,20 @@ module Csscss::Parser
         ])
       end
 
+      it "parses commented attributes" do
+        css = %$
+          .foo {
+            /*
+              some comment
+            */
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel(".foo"), [])
+        ])
+      end
+
       it "recognizes media queries" do
         css = %$
           @media only screen {

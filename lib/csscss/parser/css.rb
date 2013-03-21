@@ -13,7 +13,7 @@ module Csscss
         include Common
 
         rule(:comment) {
-          space? >> str('/*') >> (str('*/').absent? >> any).repeat >> str('*/') >> space?
+          (space? >> str('/*') >> (str('*/').absent? >> any).repeat >> str('*/') >> space?).as(:comment)
         }
 
         rule(:css_space?) {
@@ -52,7 +52,7 @@ module Csscss
 
         #rule(:blocks) { (nested_ruleset.as(:nested) | ruleset).repeat(0).as(:blocks) }
         rule(:blocks) {
-          space? >> (comment.as(:comment) | nested_ruleset | ruleset).repeat(1).as(:blocks) >> space?
+          space? >> (comment | nested_ruleset | ruleset).repeat(1).as(:blocks) >> space?
         }
 
         root(:blocks)
@@ -63,15 +63,13 @@ module Csscss
           rulesets
         }
 
-        rule(comment: simple(:comment)) {
-          []
-        }
+        rule(comment: simple(:comment)) { nil }
 
         rule(ruleset: {
           selector: simple(:selector),
           properties: sequence(:properties)
         }) {
-          Ruleset.new(Selector.from_parser(selector), properties)
+          Ruleset.new(Selector.from_parser(selector), properties.compact)
         }
 
         rule({
@@ -82,7 +80,7 @@ module Csscss
         }
 
         rule(blocks: subtree(:rulesets)) {|context|
-          context[:rulesets].flatten
+          context[:rulesets].flatten.compact
         }
       end
     end
