@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    csscss (0.0.1)
+    csscss (0.1.0)
       parslet (~> 1.5)
 
 GEM
