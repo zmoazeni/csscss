@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:zmoazeni/parslet.git
-  revision: ad50b0ea0a0f66c62cf99b7aa07f8b6662b0303b
+  revision: d099533e36f75cc7d5fe2903ff7362220643ead7
   branch: optimized-multibyte-parsing
   specs:
     parslet (1.5.0)
