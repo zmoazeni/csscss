@@ -24,6 +24,11 @@ Then you can run it in at the command line against CSS files.
 
     $ csscss path/to/styles.css path/to/other-styles.css
 
+    {.contact .content .primary} and {article, #comments} share 5 rules
+    {.profile-picture}, {.screenshot img} and {a.blurb img} share 4 rules
+    {.work h2:first-child, .archive h2:first-child, .missing h2:first-child, .about h2, .contact h2} and {body.home h2} share 4 rules
+    {article.blurb:hover} and {article:hover} share 3 rules
+
 Run it in a verbose mode to see all the duplicated styles.
 
     $ csscss -v path/to/styles.css
