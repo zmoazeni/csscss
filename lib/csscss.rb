@@ -3,6 +3,7 @@ require "optparse"
 require "json"
 
 require "parslet"
+require "csscss/parslet_optimizations"
 
 require "csscss/version"
 require "csscss/cli"

@@ -1,11 +1,3 @@
-GIT
-  remote: git@github.com:zmoazeni/parslet.git
-  revision: d099533e36f75cc7d5fe2903ff7362220643ead7
-  branch: optimized-multibyte-parsing
-  specs:
-    parslet (1.5.0)
-      blankslate (~> 2.0)
-
 PATH
   remote: .
   specs:
@@ -29,6 +21,8 @@ GEM
     method_source (0.8.1)
     minitest (2.12.1)
     minitest-rg (1.1.0)
+    parslet (1.5.0)
+      blankslate (~> 2.0)
     rake (10.0.3)
     ruby-prof (0.13.0)
 
@@ -41,6 +35,5 @@ DEPENDENCIES
   m
   minitest
   minitest-rg
-  parslet!
   rake
   ruby-prof
