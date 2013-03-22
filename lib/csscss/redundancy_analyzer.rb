@@ -1,3 +1,4 @@
+# TODO: this class really needs some work. It works, but it is horrid.
 module Csscss
   class RedundancyAnalyzer
     def initialize(raw_css)
