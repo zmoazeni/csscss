@@ -50,8 +50,8 @@ output you expect to see.
 ## Who are you? ##
 
 My name is [Zach Moazeni](https://twitter.com/zmoazeni). I work for [an
-awesome company](http://www.getharvest.com/), which [is
-hiring!](http://www.getharvest.com/careers).
+awesome company](http://www.getharvest.com/). And [we're
+hiring!](http://www.getharvest.com/careers)
 
 ## I'm a dev, I can help ##
 
