@@ -45,7 +45,8 @@ module Csscss
       if @json
         puts JSONReporter.new(combined_redundancies).report
       else
-        puts Reporter.new(combined_redundancies).report(verbose:@verbose, color:true)
+        report = Reporter.new(combined_redundancies).report(verbose:@verbose, color:true)
+        puts report unless report.empty?
       end
 
     rescue Parslet::ParseFailed => e

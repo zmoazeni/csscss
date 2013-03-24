@@ -29,5 +29,10 @@ EXPECTED
 EXPECTED
      reporter.report(verbose:true, color:false).must_equal expected
     end
+
+    it "prints a new line if there is nothing" do
+      reporter = Reporter.new({})
+      reporter.report().must_equal ""
+    end
   end
 end
