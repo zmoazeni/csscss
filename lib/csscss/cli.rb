@@ -5,6 +5,7 @@ module Csscss
       @verbose = false
       @color   = true
       @minimum = 3
+      @compass = false
     end
 
     def run
@@ -23,7 +24,18 @@ module Csscss
             exit 1
           end
 
-          Sass::Engine.for_file(filename, {cache:false}).render
+          sass_options = {cache:false}
+          sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
+          begin
+            Sass::Engine.for_file(filename, sass_options).render
+          rescue Sass::SyntaxError => e
+            if e.message =~ /compass/ && !@compass
+              puts "Enable --compass option to use compass's extensions"
+              exit 1
+            else
+              raise e
+            end
+          end
         else
           open(filename) {|f| f.read }
         end
@@ -74,6 +86,17 @@ module Csscss
         opts.on("-V", "--version", "Show version") do |v|
           puts opts.ver
           exit
+        end
+
+        opts.on("--[no-]compass", "Enables compass extensions when parsing sass/scss") do |compass|
+          if @compass = compass
+            begin
+              require "compass"
+            rescue LoadError
+              puts "Must install compass gem before enabling its extensions"
+              exit 1
+            end
+          end
         end
 
         opts.on("-j", "--[no-]json", "Output results in JSON") do |j|

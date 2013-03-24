@@ -3,7 +3,9 @@ source 'https://rubygems.org'
 # Specify your gem's dependencies in csscss.gemspec
 gemspec
 
-gem "sass" # this is an optional runtime dependency
+# optional runtime dependencies
+gem "sass"
+gem "compass"
 
 gem "rake", :require => false
 gem "debugger"
