@@ -12,22 +12,22 @@ module Csscss
       })
 
      expected =<<-EXPECTED
-{.foo} and {.bar} share 2 rules
-{h1, h2}, {.foo} and {.baz} share 1 rule
-{h1, h2} and {.bar} share 1 rule
+{.foo} AND {.bar} share 2 rules
+{h1, h2}, {.foo} AND {.baz} share 1 rule
+{h1, h2} AND {.bar} share 1 rule
 EXPECTED
-     reporter.report.must_equal expected
+     reporter.report(color:false).must_equal expected
 
      expected =<<-EXPECTED
-{.foo} and {.bar} share 2 rules
+{.foo} AND {.bar} share 2 rules
   - width: 1px
   - border: black
-{h1, h2}, {.foo} and {.baz} share 1 rule
+{h1, h2}, {.foo} AND {.baz} share 1 rule
   - display: none
-{h1, h2} and {.bar} share 1 rule
+{h1, h2} AND {.bar} share 1 rule
   - position: relative
 EXPECTED
-     reporter.report(true).must_equal expected
+     reporter.report(verbose:true, color:false).must_equal expected
     end
   end
 end

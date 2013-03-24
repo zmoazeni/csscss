@@ -1,8 +1,9 @@
 module Csscss
   class CLI
     def initialize(argv)
-      @argv = argv
+      @argv    = argv
       @verbose = false
+      @color   = true
       @minimum = 3
     end
 
@@ -30,7 +31,7 @@ module Csscss
       if @json
         puts JSONReporter.new(combined_redundancies).report
       else
-        puts Reporter.new(combined_redundancies).report(@verbose)
+        puts Reporter.new(combined_redundancies).report(verbose:@verbose, color:true)
       end
 
     rescue Parslet::ParseFailed => e
@@ -46,6 +47,10 @@ module Csscss
 
         opts.on("-v", "--[no-]verbose", "Display each rule") do |v|
           @verbose = v
+        end
+
+        opts.on("--[no-]color", "Colorizes output") do |c|
+          @color = c
         end
 
         opts.on("-n", "--num N", Integer, "Print matches with at least this many rules. Defaults to 3") do |n|

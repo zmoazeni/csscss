@@ -2,12 +2,14 @@ PATH
   remote: .
   specs:
     csscss (0.1.0)
+      colorize
       parslet (~> 1.5)
 
 GEM
   remote: https://rubygems.org/
   specs:
     blankslate (2.1.2.4)
+    colorize (0.5.8)
     columnize (0.3.6)
     debugger (1.5.0)
       columnize (>= 0.3.1)

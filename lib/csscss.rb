@@ -2,6 +2,7 @@ require "stringio"
 require "optparse"
 require "json"
 
+require "colorize"
 require "parslet"
 require "csscss/parslet_optimizations"
 

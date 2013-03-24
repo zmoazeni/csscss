@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "parslet", "~> 1.5"
+  gem.add_dependency "colorize"
 end
