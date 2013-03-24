@@ -66,10 +66,21 @@ That's hard, csscss is easy. Let it tell you what is redundant.</p>
 <pre><code>$ csscss -v path/to/styles.css
 </code></pre>
 
+<p>Run it against remote files by passing a valid URL.</p>
+
+<pre><code>$ csscss -v http://example.com/css/main.css
+</code></pre>
+
 <p>You can also choose a minimum number of matches, which will ignore any
 rulesets that have fewer matches.</p>
 
 <pre><code>$ csscss -n 10 -v path/to/style.css # ignores rulesets with &lt; 10 matches
+</code></pre>
+
+<p>If you prefer writing in sass, you can also parse your sass/scss files.</p>
+
+<pre><code>$ gem install sass
+$ csscss path/to/style.scss
 </code></pre>
 
 <h2>I found bugs</h2>
