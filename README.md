@@ -33,6 +33,10 @@ Run it in a verbose mode to see all the duplicated styles.
 
     $ csscss -v path/to/styles.css
 
+Run it against remote files by passing a valid URL.
+
+    $ csscss -v http://example.com/css/main.css
+
 You can also choose a minimum number of matches, which will ignore any
 rulesets that have fewer matches.
 
