@@ -15,8 +15,7 @@ module Csscss
     def execute
 
       all_redundancies = @argv.map do |filename|
-        contents = case File.extname(filename).downcase
-        when ".scss", ".sass"
+        contents = if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
           begin
             require "sass"
           rescue LoadError
@@ -26,7 +25,7 @@ module Csscss
 
           Sass::Engine.for_file(filename, {cache:false}).render
         else
-          File.read(filename)
+          open(filename) {|f| f.read }
         end
 
         RedundancyAnalyzer.new(contents).redundancies(@minimum)

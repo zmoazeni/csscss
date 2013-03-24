@@ -1,6 +1,7 @@
 require "stringio"
 require "optparse"
 require "json"
+require "open-uri"
 
 require "colorize"
 require "parslet"
