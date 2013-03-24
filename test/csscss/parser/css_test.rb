@@ -128,6 +128,12 @@ module Csscss::Parser
           rs(sel("h1"), [dec("outline", "1px")])
         ])
       end
+
+      it "ignores double semicolons" do
+        trans("h1 { display:none;;}").must_equal([
+          rs(sel("h1"), [dec("display", "none")])
+        ])
+      end
     end
   end
 end
