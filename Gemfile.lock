@@ -27,6 +27,7 @@ GEM
       blankslate (~> 2.0)
     rake (10.0.3)
     ruby-prof (0.13.0)
+    sass (3.2.7)
 
 PLATFORMS
   ruby
@@ -39,3 +40,4 @@ DEPENDENCIES
   minitest-rg
   rake
   ruby-prof
+  sass

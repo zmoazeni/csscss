@@ -38,6 +38,12 @@ rulesets that have fewer matches.
 
     $ csscss -n 10 -v path/to/style.css # ignores rulesets with < 10 matches
 
+If you prefer writing in sass, you can also parse your sass/scss files.
+
+    $ gem install sass
+    $ csscss path/to/style.scss
+
+
 ## I found bugs ##
 
 This is still a new and evolving project. I heartily welcome feedback.

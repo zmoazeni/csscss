@@ -13,8 +13,22 @@ module Csscss
     end
 
     def execute
+
       all_redundancies = @argv.map do |filename|
-        contents = File.read(filename)
+        contents = case File.extname(filename).downcase
+        when ".scss", ".sass"
+          begin
+            require "sass"
+          rescue LoadError
+            puts "Must install sass gem before parsing sass/scss files"
+            exit 1
+          end
+
+          Sass::Engine.for_file(filename, {cache:false}).render
+        else
+          File.read(filename)
+        end
+
         RedundancyAnalyzer.new(contents).redundancies(@minimum)
       end
 
