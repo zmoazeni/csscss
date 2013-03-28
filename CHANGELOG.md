@@ -1,3 +1,7 @@
+## Unreleased ##
+
+* Changes coloring to the selectors and declarations
+
 ## 0.2.0 - 3/24/2013 ##
 
 * Colorizes text output.
