@@ -1,6 +1,7 @@
 ## Unreleased ##
 
 * Changes coloring to the selectors and declarations
+* Fixes bug where some duplicates weren't being combined #1
 
 ## 0.2.0 - 3/24/2013 ##
 

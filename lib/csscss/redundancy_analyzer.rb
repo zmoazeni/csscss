@@ -87,15 +87,19 @@ module Csscss
 
       # combines selector keys by common declarations
       final_inverted_matches = inverted_matches.dup
-      inverted_matches.to_a[0..-2].each_with_index do |(selector_group1, declarations1), index|
+      inverted_matches.to_a.each_with_index do |(selector_group1, declarations1), index|
+        keys = [selector_group1]
         inverted_matches.to_a[(index + 1)..-1].each do |selector_group2, declarations2|
-          if declarations1 == declarations2
-            final_inverted_matches.delete(selector_group1)
+          if declarations1 == declarations2 && final_inverted_matches[selector_group2]
+            keys << selector_group2
             final_inverted_matches.delete(selector_group2)
-            key = (selector_group1 + selector_group2).sort.uniq
-            final_inverted_matches[key] ||= []
-            final_inverted_matches[key].concat(declarations1 + declarations2).uniq!
           end
+        end
+
+        if keys.size > 1
+          final_inverted_matches.delete(selector_group1)
+          key = keys.flatten.sort.uniq
+          final_inverted_matches[key] = declarations1
         end
       end
 

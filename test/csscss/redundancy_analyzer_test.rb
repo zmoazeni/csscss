@@ -76,10 +76,68 @@ module Csscss
           -moz-box-shadow: 1px 1px 10px #CCCCCC;
           -webkit-box-shadow: 1px 1px 10px #CCCCCC;
         }
+
+        .bar2 {
+          background: white;
+
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          box-shadow: 1px 1px 10px #CCCCCC;
+          -moz-box-shadow: 1px 1px 10px #CCCCCC;
+          -webkit-box-shadow: 1px 1px 10px #CCCCCC;
+        }
       $
 
       redundancies = RedundancyAnalyzer.new(css).redundancies(3)
-      redundancies[[sel(".bar"), sel(".baz")]].size.must_equal(5)
+      redundancies[[sel(".bar"), sel(".bar2"), sel(".baz")]].size.must_equal(5)
+    end
+
+    it "correctly finds counts with 3+ shared rules" do
+      css = %$
+        .foo1 {
+          background: white;
+
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          box-shadow: 1px 1px 10px #CCCCCC;
+          -moz-box-shadow: 1px 1px 10px #CCCCCC;
+          -webkit-box-shadow: 1px 1px 10px #CCCCCC;
+        }
+
+        .foo2 {
+          background: white;
+
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          box-shadow: 1px 1px 10px #CCCCCC;
+          -moz-box-shadow: 1px 1px 10px #CCCCCC;
+          -webkit-box-shadow: 1px 1px 10px #CCCCCC;
+        }
+
+        .foo3 {
+          background: white;
+
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          box-shadow: 1px 1px 10px #CCCCCC;
+          -moz-box-shadow: 1px 1px 10px #CCCCCC;
+          -webkit-box-shadow: 1px 1px 10px #CCCCCC;
+        }
+
+        .foo4 {
+          background: white;
+
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;
+          box-shadow: 1px 1px 10px #CCCCCC;
+          -moz-box-shadow: 1px 1px 10px #CCCCCC;
+          -webkit-box-shadow: 1px 1px 10px #CCCCCC;
+        }
+      $
+
+      redundancies = RedundancyAnalyzer.new(css).redundancies
+      redundancies.keys.size.must_equal 1
+      redundancies[[sel(".foo1"), sel(".foo2"), sel(".foo3"), sel(".foo4")]].size.must_equal(6)
     end
 
     it "also matches shorthand rules" do
