@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    csscss (0.2.0)
+    csscss (0.2.1)
       colorize
       parslet (~> 1.5)
 
