@@ -1,6 +1,7 @@
 ## (Unreleased) ##
 
 * Allows the user to specify ignored properties and selectors
+* Better parse error messages
 
 ## 0.2.1 - 3/28/2013 ##
 

@@ -65,8 +65,13 @@ module Csscss
       end
 
     rescue Parslet::ParseFailed => e
-      puts "Had a problem parsing the css"
-      puts e.cause.ascii_tree
+      line, column = e.cause.source.line_and_column
+      puts "Had a problem parsing the css at line: #{line}, column: #{column}".red
+      if ENV['CSSCSS_DEBUG'] == 'true'
+        puts e.cause.ascii_tree.red
+      else
+        puts "Run with CSSCSS_DEBUG=true for verbose parser errors".red
+      end
       exit 1
     end
 
