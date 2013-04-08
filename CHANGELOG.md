@@ -1,4 +1,4 @@
-## (Unreleased) ##
+## 1.0.0 - 4/7/2013 ##
 
 * Allows the user to specify ignored properties and selectors
 * Better parse error messages
