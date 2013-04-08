@@ -5,13 +5,20 @@ module Csscss
       @raw_css = raw_css
     end
 
-    def redundancies(minimum = nil)
+    def redundancies(opts = {})
+      minimum            = opts[:minimum]
+      ignored_properties = opts[:ignored_properties] || []
+      ignored_selectors  = opts[:ignored_selectors] || []
+
       rule_sets = Parser::Css.parse(@raw_css)
       matches = {}
       parents = {}
       rule_sets.each do |rule_set|
+        next if ignored_selectors.include?(rule_set.selectors.selectors)
+        sel = rule_set.selectors
+
         rule_set.declarations.each do |dec|
-          sel = rule_set.selectors
+          next if ignored_properties.include?(dec.property)
 
           if parser = shorthand_parser(dec.property)
             if new_decs = parser.parse(dec.property, dec.value)

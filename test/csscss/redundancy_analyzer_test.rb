@@ -22,7 +22,7 @@ module Csscss
         [sel(".bar"), sel("h1, h2")] , [dec("outline", "none"), dec("position", "relative")]
       ]
 
-      RedundancyAnalyzer.new(css).redundancies(2).must_equal({
+      RedundancyAnalyzer.new(css).redundancies(minimum:2).must_equal({
         [sel(".bar"), sel("h1, h2")] => [dec("outline", "none"), dec("position", "relative")]
       })
     end
@@ -88,7 +88,7 @@ module Csscss
         }
       $
 
-      redundancies = RedundancyAnalyzer.new(css).redundancies(3)
+      redundancies = RedundancyAnalyzer.new(css).redundancies(minimum:3)
       redundancies[[sel(".bar"), sel(".bar2"), sel(".baz")]].size.must_equal(5)
     end
 
@@ -230,7 +230,7 @@ module Csscss
         [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-style", "solid"), dec("border-width", "4px")]
       })
 
-      RedundancyAnalyzer.new(css).redundancies(2).must_equal({
+      RedundancyAnalyzer.new(css).redundancies(minimum:2).must_equal({
         [sel(".bar"), sel(".baz"), sel(".foo")] => [dec("border-style", "solid"), dec("border-width", "4px")]
       })
     end
@@ -245,6 +245,24 @@ module Csscss
       RedundancyAnalyzer.new(css).redundancies.must_equal({
         [sel(".bar"), sel(".baz")] => [dec("padding-bottom", "4px")],
         [sel(".bar"), sel(".foo")] => [dec("margin-right", "5px")]
+      })
+    end
+
+    it "ignores specific properties" do
+      css = %$
+        h1, h2 { display: none; position: relative; outline:none}
+        .foo { DISPLAY: none; width: 1px }
+        .bar { position: relative; width: 1px; outline: none }
+        .baz { display: none }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies(ignored_properties:%w(display outline)).must_equal({
+        [sel(".bar"), sel("h1, h2")] => [dec("position", "relative")],
+        [sel(".bar"), sel(".foo")] => [dec("width", "1px")],
+      })
+
+      RedundancyAnalyzer.new(css).redundancies(ignored_properties:%w(display outline), ignored_selectors:%w(.foo)).must_equal({
+        [sel(".bar"), sel("h1, h2")] => [dec("position", "relative")]
       })
     end
 

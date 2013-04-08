@@ -1,11 +1,13 @@
 module Csscss
   class CLI
     def initialize(argv)
-      @argv    = argv
-      @verbose = false
-      @color   = true
-      @minimum = 3
-      @compass = false
+      @argv               = argv
+      @verbose            = false
+      @color              = true
+      @minimum            = 3
+      @compass            = false
+      @ignored_properties = []
+      @ignored_selectors  = []
     end
 
     def run
@@ -40,7 +42,9 @@ module Csscss
           open(filename) {|f| f.read }
         end
 
-        RedundancyAnalyzer.new(contents).redundancies(@minimum)
+        RedundancyAnalyzer.new(contents).redundancies(minimum:           @minimum,
+                                                     ignored_properties: @ignored_properties,
+                                                     ignored_selectors:  @ignored_selectors)
       end
 
       combined_redundancies = all_redundancies.inject({}) do |combined, redundancies|
@@ -81,6 +85,14 @@ module Csscss
 
         opts.on("-n", "--num N", Integer, "Print matches with at least this many rules. Defaults to 3") do |n|
           @minimum = n
+        end
+
+        opts.on("--ignore-properties property1,property2,...", Array, "Ignore these properties when finding matches") do |ignored_properties|
+          @ignored_properties = ignored_properties
+        end
+
+        opts.on('--ignore-selectors "selector1","selector2",...', Array, "Ignore these selectors when finding matches") do |ignored_selectors|
+          @ignored_selectors = ignored_selectors
         end
 
         opts.on("-V", "--version", "Show version") do |v|
