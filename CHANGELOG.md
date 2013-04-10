@@ -1,3 +1,7 @@
+## (Unreleased) ##
+
+* Fixes bug where CLI --no-color wasn't respected
+
 ## 1.0.0 - 4/7/2013 ##
 
 * Allows the user to specify ignored properties and selectors

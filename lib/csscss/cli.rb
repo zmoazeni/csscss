@@ -60,7 +60,7 @@ module Csscss
       if @json
         puts JSONReporter.new(combined_redundancies).report
       else
-        report = Reporter.new(combined_redundancies).report(verbose:@verbose, color:true)
+        report = Reporter.new(combined_redundancies).report(verbose:@verbose, color:@color)
         puts report unless report.empty?
       end
 
