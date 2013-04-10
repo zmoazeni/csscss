@@ -42,9 +42,11 @@ module Csscss
           open(filename) {|f| f.read }
         end
 
-        RedundancyAnalyzer.new(contents).redundancies(minimum:           @minimum,
-                                                     ignored_properties: @ignored_properties,
-                                                     ignored_selectors:  @ignored_selectors)
+        RedundancyAnalyzer.new(contents).redundancies(
+          minimum:            @minimum,
+          ignored_properties: @ignored_properties,
+          ignored_selectors:  @ignored_selectors
+        )
       end
 
       combined_redundancies = all_redundancies.inject({}) do |combined, redundancies|
