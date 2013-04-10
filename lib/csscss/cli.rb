@@ -15,30 +15,51 @@ module Csscss
       execute
     end
 
-    def execute
+    def load_sass_file(filename)
+      begin
+        require "sass"
+        rescue LoadError
+          puts "Must install sass gem before parsing sass/scss files"
+          exit 1
+        end
 
+        sass_options = {cache:false}
+        sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
+        begin
+          Sass::Engine.for_file(filename, sass_options).render
+          rescue Sass::SyntaxError => e
+          if e.message =~ /compass/ && !@compass
+            puts "Enable --compass option to use compass's extensions"
+            exit 1
+          else
+            raise e
+          end
+        end
+    end
+
+    def load_less_file(filename)
+      begin
+        require "less"
+      rescue LoadError
+        puts "Must install less gem before parsing less files"           
+        exit 1
+      end
+
+      begin
+        Less::Parser.new.parse.to_css(filename)
+      rescue ParseError 
+        puts "Less parse error"
+        exit 1
+      end
+    end
+
+    def execute
       all_redundancies = @argv.map do |filename|
         contents = if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
-          begin
-            require "sass"
-          rescue LoadError
-            puts "Must install sass gem before parsing sass/scss files"
-            exit 1
-          end
-
-          sass_options = {cache:false}
-          sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
-          begin
-            Sass::Engine.for_file(filename, sass_options).render
-          rescue Sass::SyntaxError => e
-            if e.message =~ /compass/ && !@compass
-              puts "Enable --compass option to use compass's extensions"
-              exit 1
-            else
-              raise e
-            end
-          end
-        else
+          load_sass_file(filename)
+        elsif %w(.less).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp) 
+          load_less_file(filename)
+        else        
           open(filename) {|f| f.read }
         end
 
