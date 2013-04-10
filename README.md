@@ -21,8 +21,7 @@ First you need to install it. It is currently packaged as a ruby gem:
 
     $ gem install csscss
 
-Note: csscss only works on ruby 1.9.x and up. It will have trouble with ruby
-1.8.x.
+Note: csscss only works on ruby 1.9.x and up. It will have trouble with ruby 1.8.x.
 
 Then you can run it in at the command line against CSS files.
 
