@@ -46,7 +46,7 @@ module Csscss
         RedundancyAnalyzer.new(contents).redundancies(
           minimum:            @minimum,
           ignored_properties: @ignored_properties,
-          ignored_selectors:  @ignored_selectorsm,
+          ignored_selectors:  @ignored_selectors,
           use_shorthand:      @use_shorthand
         )
       end
