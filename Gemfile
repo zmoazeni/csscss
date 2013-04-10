@@ -6,6 +6,7 @@ gemspec
 # optional runtime dependencies
 gem "sass"
 gem "compass"
+gem "less"
 
 gem "rake", :require => false
 gem "debugger"
