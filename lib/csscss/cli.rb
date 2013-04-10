@@ -104,7 +104,7 @@ module Csscss
           @ignored_selectors = ignored_selectors
         end
 
-        opts.on('--use-shorthand', "Don't parse shorthand notation") do |ignored_selectors|
+        opts.on('--use-shorthand', "Don't parse shorthand notation") do
           @use_shorthand = true
         end
 
