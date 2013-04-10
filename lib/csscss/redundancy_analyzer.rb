@@ -1,16 +1,24 @@
+# TODO: this class really needs some work. It works, but it is horrid.
 module Csscss
   class RedundancyAnalyzer
     def initialize(raw_css)
       @raw_css = raw_css
     end
 
-    def redundancies(minimum = nil)
+    def redundancies(opts = {})
+      minimum            = opts[:minimum]
+      ignored_properties = opts[:ignored_properties] || []
+      ignored_selectors  = opts[:ignored_selectors] || []
+
       rule_sets = Parser::Css.parse(@raw_css)
       matches = {}
       parents = {}
       rule_sets.each do |rule_set|
+        next if ignored_selectors.include?(rule_set.selectors.selectors)
+        sel = rule_set.selectors
+
         rule_set.declarations.each do |dec|
-          sel = rule_set.selectors
+          next if ignored_properties.include?(dec.property)
 
           if parser = shorthand_parser(dec.property)
             if new_decs = parser.parse(dec.property, dec.value)
@@ -86,15 +94,19 @@ module Csscss
 
       # combines selector keys by common declarations
       final_inverted_matches = inverted_matches.dup
-      inverted_matches.to_a[0..-2].each_with_index do |(selector_group1, declarations1), index|
+      inverted_matches.to_a.each_with_index do |(selector_group1, declarations1), index|
+        keys = [selector_group1]
         inverted_matches.to_a[(index + 1)..-1].each do |selector_group2, declarations2|
-          if declarations1 == declarations2
-            final_inverted_matches.delete(selector_group1)
+          if declarations1 == declarations2 && final_inverted_matches[selector_group2]
+            keys << selector_group2
             final_inverted_matches.delete(selector_group2)
-            key = (selector_group1 + selector_group2).sort.uniq
-            final_inverted_matches[key] ||= []
-            final_inverted_matches[key].concat(declarations1 + declarations2).uniq!
           end
+        end
+
+        if keys.size > 1
+          final_inverted_matches.delete(selector_group1)
+          key = keys.flatten.sort.uniq
+          final_inverted_matches[key] = declarations1
         end
       end
 

@@ -20,6 +20,8 @@ module Csscss
           comment.repeat(1) | space?
         }
 
+        rule(:blank_attribute) { str(";") >> space? }
+
         rule(:attribute) {
           match["^:{}"].repeat(1).as(:property) >>
           str(":") >>
@@ -33,7 +35,7 @@ module Csscss
             match["^{}"].repeat(1).as(:selector) >>
             str("{") >>
             space? >>
-            (comment | attribute).repeat(0).as(:properties) >>
+            (comment | attribute | blank_attribute).repeat(0).as(:properties) >>
             str("}") >>
             space?
           ).as(:ruleset)
@@ -50,7 +52,6 @@ module Csscss
           ).as(:nested_ruleset)
         }
 
-        #rule(:blocks) { (nested_ruleset.as(:nested) | ruleset).repeat(0).as(:blocks) }
         rule(:blocks) {
           space? >> (comment | nested_ruleset | ruleset).repeat(1).as(:blocks) >> space?
         }

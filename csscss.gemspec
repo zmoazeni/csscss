@@ -8,9 +8,9 @@ Gem::Specification.new do |gem|
   gem.version       = Csscss::VERSION
   gem.authors       = ["Zach Moazeni"]
   gem.email         = ["zach.moazeni@gmail.com"]
-  gem.description   = %q{A CSS redundancy analyzer that analyzes redundancy.}
   gem.summary       = %q{A CSS redundancy analyzer that analyzes redundancy.}
-  gem.homepage      = ""
+  gem.description   = %q{csscss will parse any CSS files you give it and let you know which rulesets have duplicated declarations.}
+  gem.homepage      = "http://zmoazeni.github.com/csscss/"
 
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
@@ -18,4 +18,5 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency "parslet", "~> 1.5"
+  gem.add_dependency "colorize"
 end

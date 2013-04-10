@@ -1,7 +1,9 @@
 require "stringio"
 require "optparse"
 require "json"
+require "open-uri"
 
+require "colorize"
 require "parslet"
 require "csscss/parslet_optimizations"
 
