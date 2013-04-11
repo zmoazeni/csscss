@@ -21,9 +21,14 @@ module Csscss
         (match['a-zA-Z0-9.:/\-'] | str('\(') | str('\)')).repeat >> space?
       }
 
+      rule(:data) {
+        stri("data:") >> match['a-zA-Z0-9.:/+;,=\-'].repeat >> space?
+      }
+
       rule(:url) {
         stri("url") >> parens do
           (any_quoted { http } >> space?) |
+          (any_quoted { data } >> space?) |
           http
         end
       }

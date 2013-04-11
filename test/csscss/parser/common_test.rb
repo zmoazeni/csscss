@@ -121,6 +121,11 @@ module Csscss::Parser
         @parser.http.must_parse 'http://foo-bar.com/foo.jpg'
       end
 
+      it "parses data" do
+        @parser.data.must_parse 'data:image/jpg;base64,IMGDATAGOESHERE=='
+        @parser.data.must_parse 'data:image/svg+xml;base64,IMGDATAGOESHERE4/5/h/1+=='
+      end
+
       it "parses urls" do
         @parser.url.must_parse "url(foo.jpg)"
         @parser.url.must_parse "url(  foo.jpg  )"
@@ -128,6 +133,7 @@ module Csscss::Parser
         @parser.url.must_parse "url('foo.jpg')"
         @parser.url.must_parse "url('foo.jpg'  )"
         @parser.url.must_parse 'url(foo\(bar\).jpg)'
+        @parser.url.must_parse "url('data:image/svg+xml;base64,IMGDATAGOESHERE4/5/h/1+==')"
       end
     end
   end
