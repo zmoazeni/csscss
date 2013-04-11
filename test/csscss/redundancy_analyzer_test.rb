@@ -68,7 +68,7 @@ module Csscss
         .baz {
           margin: 3px 3px 30px 3px;
           padding: 10px 30px;
-          background: white url(images/bg-bolt-inactive.png) no-repeat 99% 5px;
+          background: blue url(images/bg-bolt-inactive.png) no-repeat 99% 5px;
 
           -webkit-border-radius: 4px;
           -moz-border-radius: 4px;
