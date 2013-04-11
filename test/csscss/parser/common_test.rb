@@ -115,6 +115,10 @@ module Csscss::Parser
         @parser.http.must_parse 'foo\(bar\).jpg'
         @parser.http.must_parse 'http://foo\(bar\).jpg'
         @parser.http.must_parse 'http://foo.com/baz/\(bar\).jpg'
+        @parser.http.must_parse '//foo.com/foo.jpg'
+        @parser.http.must_parse 'https://foo.com/foo.jpg'
+        @parser.http.must_parse 'http://foo100.com/foo.jpg'
+        @parser.http.must_parse 'http://foo-bar.com/foo.jpg'
       end
 
       it "parses urls" do
