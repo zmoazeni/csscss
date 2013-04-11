@@ -18,7 +18,7 @@ module Csscss
       rule(:nada)       { any.repeat.as(:nada) }
 
       rule(:http) {
-        (match['a-zA-Z.:/'] | str('\(') | str('\)')).repeat >> space?
+        (match['a-zA-Z0-9.:/\-'] | str('\(') | str('\)')).repeat >> space?
       }
 
       rule(:url) {
