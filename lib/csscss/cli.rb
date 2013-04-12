@@ -23,8 +23,7 @@ module Csscss
           begin
             require "sass"
           rescue LoadError
-            puts "Must install sass gem before parsing sass/scss files"
-            exit 1
+            abort "Must install sass gem before parsing sass/scss files"
           end
 
           sass_options = {cache:false}
