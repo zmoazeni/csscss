@@ -108,14 +108,12 @@ module Csscss
         end
 
         opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
-          if @compass = compass
-            begin
-              require "compass"
-            rescue LoadError
-              puts "Must install compass gem before enabling its extensions"
-              exit 1
-            end
-          end
+          enable_compass if @compass = compass
+        end
+
+        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file") do |config|
+          @compass = true
+          enable_compass(config)
         end
 
         opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
@@ -145,6 +143,18 @@ module Csscss
 
     def warn_old_debug_flag
       $stderr.puts "CSSCSS_DEBUG is now deprecated. Use --show-parser-errors instead".red
+    end
+
+    def enable_compass(config = nil)
+      require "compass"
+
+      if config
+        Compass.add_configuration(config)
+      else
+        Compass.add_configuration("config.rb") if File.exist?("config.rb")
+      end
+    rescue LoadError
+      abort "Must install compass gem before enabling its extensions"
     end
 
     class << self
