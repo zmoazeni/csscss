@@ -87,7 +87,7 @@ module Csscss
           @verbose = v
         end
 
-        opts.on("--[no-]color", "Colorizes output") do |c|
+        opts.on("--[no-]color", "Colorize output (default is true)") do |c|
           @color = c
         end
 
@@ -108,7 +108,7 @@ module Csscss
           exit
         end
 
-        opts.on("--[no-]compass", "Enables compass extensions when parsing sass/scss") do |compass|
+        opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
           if @compass = compass
             begin
               require "compass"
