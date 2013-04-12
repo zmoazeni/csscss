@@ -16,6 +16,7 @@ module Csscss
     end
 
     def execute
+      warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
 
       all_redundancies = @argv.map do |filename|
         contents = if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
@@ -69,10 +70,10 @@ module Csscss
     rescue Parslet::ParseFailed => e
       line, column = e.cause.source.line_and_column
       puts "Had a problem parsing the css at line: #{line}, column: #{column}".red
-      if ENV['CSSCSS_DEBUG'] == 'true'
+      if @show_parser_errors || ENV['CSSCSS_DEBUG'] == 'true'
         puts e.cause.ascii_tree.red
       else
-        puts "Run with CSSCSS_DEBUG=true for verbose parser errors".red
+        puts "Run with --show-parser-errors for verbose parser errors".red
       end
       exit 1
     end
@@ -122,6 +123,10 @@ module Csscss
           @json = j
         end
 
+        opts.on("--show-parser-errors", "Print verbose parser errors") do |show_parser_errors|
+          @show_parser_errors = show_parser_errors
+        end
+
         opts.on_tail("-h", "--help", "Show this message") do
           print_help(opts)
         end
@@ -137,6 +142,10 @@ module Csscss
     def print_help(opts)
       puts opts
       exit
+    end
+
+    def warn_old_debug_flag
+      $stderr.puts "CSSCSS_DEBUG is now deprecated. Use --show-parser-errors instead".red
     end
 
     class << self
