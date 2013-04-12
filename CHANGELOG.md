@@ -1,4 +1,4 @@
-## (Unreleased) ##
+## 1.1.0 - 4/12/2013 ##
 
 * Fixes bug where CLI --no-color wasn't respected
 * Added ruby version requirement for >= 1.9
