@@ -6,6 +6,7 @@
 * Fixes bugs with urls that have dashes in them
 * Fixes bugs with urls containing encoded data (usually images)
 * Deprecates CSSCSS_DEBUG in favor of --show-parser-errors
+* Fixes line/column output during parser errors
 
 ## 1.0.0 - 4/7/2013 ##
 
