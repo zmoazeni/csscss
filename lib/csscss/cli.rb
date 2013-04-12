@@ -26,6 +26,10 @@ module Csscss
             abort "Must install sass gem before parsing sass/scss files"
           end
 
+          if File.exist?("config.rb") and @compass
+            Compass.add_configuration("config.rb")
+          end
+
           sass_options = {cache:false}
           sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
           begin
