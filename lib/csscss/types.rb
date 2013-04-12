@@ -69,6 +69,12 @@ module Csscss
     end
   end
 
+  class Metadata < Struct.new(:line_number)
+    def self.from_parser(selectors)
+      new(selectors.line_and_column[0])
+    end
+  end
+
   class Selector < Struct.new(:selectors)
     def self.from_parser(selectors)
       new(selectors.to_s.strip)
@@ -87,6 +93,6 @@ module Csscss
     end
   end
 
-  class Ruleset < Struct.new(:selectors, :declarations)
+  class Ruleset < Struct.new(:selectors, :declarations, :metadata)
   end
 end

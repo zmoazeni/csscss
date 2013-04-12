@@ -49,10 +49,10 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel("h1, h2"), [dec("display", "none"), dec("position", "relative"), dec("outline", "none")]),
-          rs(sel(".foo"), [dec("display", "none"), dec("width", "1px")]),
-          rs(sel(".bar"), [dec("border", "1px solid black")]),
-          rs(sel(".baz"), [dec("background-color", "black"), dec("background-style", "solid")])
+          rs(sel("h1, h2"), [dec("display", "none"), dec("position", "relative"), dec("outline", "none")], md(2)),
+          rs(sel(".foo"), [dec("display", "none"), dec("width", "1px")], md(3)),
+          rs(sel(".bar"), [dec("border", "1px solid black")], md(4)),
+          rs(sel(".baz"), [dec("background-color", "black"), dec("background-style", "solid")], md(5))
         ])
       end
 
@@ -66,8 +66,8 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel(".bar"), [dec("border", "1px solid black /* sdflk */")]),
-          rs(sel(".baz"), [dec("background", "white /* sdflk */")])
+          rs(sel(".bar"), [dec("border", "1px solid black /* sdflk */")], md(5)),
+          rs(sel(".baz"), [dec("background", "white /* sdflk */")], md(6))
         ])
       end
 
@@ -86,7 +86,7 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel(".baz"), [dec("background", "white"), dec("border", "1px")])
+          rs(sel(".baz"), [dec("background", "white"), dec("border", "1px")], md(7))
         ])
       end
 
@@ -100,7 +100,7 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel(".foo"), [])
+          rs(sel(".foo"), [], md(2))
         ])
       end
 
@@ -123,15 +123,15 @@ module Csscss::Parser
         $
 
         trans(css).must_equal([
-          rs(sel("#foo"), [dec("background-color", "black")]),
-          rs(sel("#bar"), [dec("display", "none")]),
-          rs(sel("h1"), [dec("outline", "1px")])
+          rs(sel("#foo"), [dec("background-color", "black")], md(4)),
+          rs(sel("#bar"), [dec("display", "none")], md(8)),
+          rs(sel("h1"), [dec("outline", "1px")], md(13))
         ])
       end
 
       it "ignores double semicolons" do
         trans("h1 { display:none;;}").must_equal([
-          rs(sel("h1"), [dec("display", "none")])
+          rs(sel("h1"), [dec("display", "none")], md(1))
         ])
       end
     end

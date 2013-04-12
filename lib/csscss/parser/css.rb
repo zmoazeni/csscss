@@ -70,7 +70,7 @@ module Csscss
           selector: simple(:selector),
           properties: sequence(:properties)
         }) {
-          Ruleset.new(Selector.from_parser(selector), properties.compact)
+          Ruleset.new(Selector.from_parser(selector), properties.compact, Metadata.from_parser(selector))
         }
 
         rule({
