@@ -5,13 +5,25 @@ module Csscss
     end
 
     def self.from_parser(property, value, clean = true)
-      value = value.to_s
+      value = normalize_value(value)
       property = property.to_s
       if clean
         value = value.downcase
         property = property.downcase
       end
       new(property, value.strip)
+    end
+
+    def self.normalize_value(value)
+      value = value.to_s.strip
+      return value if value.nil?
+
+      zero_regex_matches = value.match(/^(0)(.*)/)
+      if zero_regex_matches && zero_regex_matches.length
+        zero_regex_matches[1] # "0"
+      else
+        value
+      end
     end
 
     def derivative?

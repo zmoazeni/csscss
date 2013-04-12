@@ -266,6 +266,18 @@ module Csscss
       })
     end
 
+    it "matches 0 and 0px" do
+      css = %$
+        .bar { padding: 0; }
+        .foo { padding: 0px; }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("padding", "0")]
+      })
+    end
+
+
     # TODO: someday
     # it "reports duplication within the same selector" do
     #   css = %$

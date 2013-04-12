@@ -64,7 +64,6 @@ module Csscss
         end
       end
 
-
       # trims any derivative declarations alongside shorthand
       inverted_matches.each do |selectors, declarations|
         redundant_derivatives = declarations.select do |dec|

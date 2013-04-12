@@ -13,7 +13,7 @@ module Csscss
       rule(:percent)              { decimal >> stri("%") >> space? }
       rule(:non_zero_length)      { decimal >> stri_list(UNITS) >> space?  }
       rule(:zero_length)          { match["0"] }
-      rule(:length)               { non_zero_length | zero_length }
+      rule(:length)               { zero_length | non_zero_length }
       rule(:identifier)           { match["a-zA-Z"].repeat(1) }
       rule(:inherit)              { stri("inherit") }
       rule(:eof)                  { any.absent? }
