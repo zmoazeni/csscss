@@ -8,6 +8,7 @@ module Csscss
       @compass            = false
       @ignored_properties = []
       @ignored_selectors  = []
+      @use_shorthand      = false
     end
 
     def run
@@ -47,7 +48,8 @@ module Csscss
         redundancies = RedundancyAnalyzer.new(all_contents).redundancies(
           minimum:            @minimum,
           ignored_properties: @ignored_properties,
-          ignored_selectors:  @ignored_selectors
+          ignored_selectors:  @ignored_selectors,
+          use_shorthand:      @use_shorthand
         )
 
         if @json
@@ -92,6 +94,10 @@ module Csscss
 
         opts.on('--ignore-selectors "selector1","selector2",...', Array, "Ignore these selectors when finding matches") do |ignored_selectors|
           @ignored_selectors = ignored_selectors
+        end
+
+        opts.on('--use-shorthand', "Don't parse shorthand notation") do
+          @use_shorthand = true
         end
 
         opts.on("-V", "--version", "Show version") do |v|

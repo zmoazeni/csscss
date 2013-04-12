@@ -266,6 +266,16 @@ module Csscss
       })
     end
 
+    it "use shorthand" do
+      css = %$
+        .foo { border: 1px solid #000; color: #000; padding: 10px 0; }
+        .bar { border: 1px solid #fff; color: #000; padding-top: 10px; }
+      $
+
+      redundancies = RedundancyAnalyzer.new(css).redundancies(use_shorthand:true)
+      redundancies[[sel(".bar"), sel(".foo")]].size.must_equal(1)
+    end
+
     # TODO: someday
     # it "reports duplication within the same selector" do
     #   css = %$
