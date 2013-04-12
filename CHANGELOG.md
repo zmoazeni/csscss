@@ -1,6 +1,8 @@
 ## (Unreleased) ##
 
 * Fixes bug where CLI --no-color wasn't respected
+* Added ruby version requirement for >= 1.9
+* Added CONTRIBUTORS.md
 
 ## 1.0.0 - 4/7/2013 ##
 
