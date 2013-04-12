@@ -11,6 +11,7 @@
 * Adds --compass-with-config that lets users specify a config
 * Fixes parser error bug when trying to parse blank files
 * Fixes bug where rules from multiple files aren't consolidated
+* Adds --no-match-shorthand to allow users to opt out of shorthand matching
 
 ## 1.0.0 - 4/7/2013 ##
 

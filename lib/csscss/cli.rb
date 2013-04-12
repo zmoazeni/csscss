@@ -8,6 +8,7 @@ module Csscss
       @compass            = false
       @ignored_properties = []
       @ignored_selectors  = []
+      @match_shorthand   = true
     end
 
     def run
@@ -47,7 +48,8 @@ module Csscss
         redundancies = RedundancyAnalyzer.new(all_contents).redundancies(
           minimum:            @minimum,
           ignored_properties: @ignored_properties,
-          ignored_selectors:  @ignored_selectors
+          ignored_selectors:  @ignored_selectors,
+          match_shorthand:    @match_shorthand
         )
 
         if @json
@@ -106,6 +108,10 @@ module Csscss
         opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file") do |config|
           @compass = true
           enable_compass(config)
+        end
+
+        opts.on("--[no-]match-shorthand", "Expands shorthand rules and matches on explicit rules (default is true)") do |match_shorthand|
+          @match_shorthand = match_shorthand
         end
 
         opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
