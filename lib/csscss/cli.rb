@@ -68,7 +68,7 @@ module Csscss
       end
 
     rescue Parslet::ParseFailed => e
-      line, column = e.cause.source.line_and_column
+      line, column = e.cause.source.line_and_column(e.cause.pos)
       puts "Had a problem parsing the css at line: #{line}, column: #{column}".red
       if @show_parser_errors || ENV['CSSCSS_DEBUG'] == 'true'
         puts e.cause.ascii_tree.red
