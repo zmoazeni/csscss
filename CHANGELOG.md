@@ -3,6 +3,8 @@
 * Fixes bug where CLI --no-color wasn't respected
 * Added ruby version requirement for >= 1.9
 * Added CONTRIBUTORS.md
+* Fixes bugs with urls that have dashes in them
+* Fixes bugs with urls containing encoded data (usually images)
 
 ## 1.0.0 - 4/7/2013 ##
 
