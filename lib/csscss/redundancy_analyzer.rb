@@ -5,57 +5,62 @@ module Csscss
       @raw_css = raw_css
     end
 
+    def border_property(property, dec, sel)
+      border_dec = Declaration.new(property, dec.value)
+      @parents[border_dec] ||= []
+      (@parents[border_dec] << dec).uniq!
+      border_dec.parents = @parents[border_dec]
+
+      @matches[border_dec] ||= []
+      @matches[border_dec] << sel
+      @matches[border_dec].uniq!
+    end
+
     def redundancies(opts = {})
-      minimum            = opts[:minimum]
-      ignored_properties = opts[:ignored_properties] || []
-      ignored_selectors  = opts[:ignored_selectors] || []
+      @minimum            = opts[:minimum]
+      @ignored_properties = opts[:ignored_properties] || []
+      @ignored_selectors  = opts[:ignored_selectors] || []
 
       rule_sets = Parser::Css.parse(@raw_css)
-      matches = {}
-      parents = {}
+      @matches = {}
+      @parents = {}
+
       rule_sets.each do |rule_set|
-        next if ignored_selectors.include?(rule_set.selectors.selectors)
+        next if @ignored_selectors.include?(rule_set.selectors.selectors)
         sel = rule_set.selectors
 
         rule_set.declarations.each do |dec|
-          next if ignored_properties.include?(dec.property)
+          next if @ignored_properties.include?(dec.property)
 
           if parser = shorthand_parser(dec.property)
             if new_decs = parser.parse(dec.property, dec.value)
               if dec.property == "border"
                 %w(border-top border-right border-bottom border-left).each do |property|
-                  border_dec = Declaration.new(property, dec.value)
-                  parents[border_dec] ||= []
-                  (parents[border_dec] << dec).uniq!
-                  border_dec.parents = parents[border_dec]
-
-                  matches[border_dec] ||= []
-                  matches[border_dec] << sel
-                  matches[border_dec].uniq!
+                  border_property(property, dec, sel)
                 end
               end
 
               new_decs.each do |new_dec|
                 # replace any non-derivatives with derivatives
-                existing = matches.delete(new_dec) || []
+                existing = @matches.delete(new_dec) || []
                 existing << sel
-                parents[new_dec] ||= []
-                (parents[new_dec] << dec).uniq!
-                new_dec.parents = parents[new_dec]
-                matches[new_dec] = existing
-                matches[new_dec].uniq!
+                @parents[new_dec] ||= []
+                (@parents[new_dec] << dec).uniq!
+                new_dec.parents = @parents[new_dec]
+                @matches[new_dec] = existing
+                @matches[new_dec].uniq!
               end
             end
           end
 
-          matches[dec] ||= []
-          matches[dec] << sel
-          matches[dec].uniq!
+          @matches[dec] ||= []
+          @matches[dec] << sel
+          @matches[dec].uniq!
         end
       end
 
       inverted_matches = {}
-      matches.each do |declaration, selector_groups|
+      @matches.each do |declaration, selector_groups|
         if selector_groups.size > 1
           selector_groups.combination(2).each do |two_selectors|
             inverted_matches[two_selectors] ||= []
@@ -86,9 +91,9 @@ module Csscss
         end
       end
 
-      if minimum
+      if @minimum
         inverted_matches.delete_if do |key, declarations|
-          declarations.size < minimum
+          declarations.size < @minimum
         end
       end
 
