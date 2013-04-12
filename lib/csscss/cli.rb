@@ -18,8 +18,8 @@ module Csscss
     def execute
       warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
 
-      all_redundancies = @argv.map do |filename|
-        contents = if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
+      all_contents = @argv.map do |filename|
+        if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
           begin
             require "sass"
           rescue LoadError
@@ -41,33 +41,21 @@ module Csscss
         else
           open(filename) {|f| f.read }
         end
+      end.join("\n")
 
-        if contents.strip.empty?
-          {}
+      unless all_contents.strip.empty?
+        redundancies = RedundancyAnalyzer.new(all_contents).redundancies(
+          minimum:            @minimum,
+          ignored_properties: @ignored_properties,
+          ignored_selectors:  @ignored_selectors
+        )
+
+        if @json
+          puts JSONReporter.new(redundancies).report
         else
-          RedundancyAnalyzer.new(contents).redundancies(
-            minimum:            @minimum,
-            ignored_properties: @ignored_properties,
-            ignored_selectors:  @ignored_selectors
-          )
+          report = Reporter.new(redundancies).report(verbose:@verbose, color:@color)
+          puts report unless report.empty?
         end
-      end
-
-      combined_redundancies = all_redundancies.inject({}) do |combined, redundancies|
-        if combined.empty?
-          redundancies
-        else
-          combined.merge(redundancies) do |_, v1, v2|
-            (v1 + v2).uniq
-          end
-        end
-      end
-
-      if @json
-        puts JSONReporter.new(combined_redundancies).report
-      else
-        report = Reporter.new(combined_redundancies).report(verbose:@verbose, color:@color)
-        puts report unless report.empty?
       end
 
     rescue Parslet::ParseFailed => e

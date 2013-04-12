@@ -10,6 +10,7 @@
 * --compass now grabs config.rb by default if it exists
 * Adds --compass-with-config that lets users specify a config
 * Fixes parser error bug when trying to parse blank files
+* Fixes bug where rules from multiple files aren't consolidated
 
 ## 1.0.0 - 4/7/2013 ##
 
