@@ -69,5 +69,13 @@ module Csscss
       h[dec2].must_equal true
       h[dec3].must_equal true
     end
+
+    it "equates 0 length with and without units" do
+      Declaration.new("padding", "0px").must_equal Declaration.new("padding", "0")
+      Declaration.new("padding", "0%").must_equal Declaration.new("padding", "0")
+      Declaration.new("padding", "0").must_equal Declaration.new("padding", "0em")
+
+      Declaration.new("padding", "1").wont_equal Declaration.new("padding", "1px")
+    end
   end
 end

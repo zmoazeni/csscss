@@ -2,3 +2,4 @@
 * Carson McDonald @carsonmcdonald
 * Martin Kuckert @MKuckert
 * Ivan Lazarevic @kopipejst
+* Matt DuVall @mduvall twitter:@mduvall_

@@ -1,3 +1,7 @@
+## (Unreleased)
+
+* 0 and 0px are now reconciled as redundancies
+
 ## 1.1.0 - 4/12/2013 ##
 
 * Fixes bug where CLI --no-color wasn't respected

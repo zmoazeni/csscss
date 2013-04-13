@@ -5,17 +5,19 @@ module Csscss
 
       UNITS = %w(px em ex in cm mm pt pc)
 
-      rule(:space)      { match['\s'].repeat(1) }
-      rule(:space?)     { space.maybe }
-      rule(:number)     { match["0-9"] }
-      rule(:numbers)    { number.repeat(1) }
-      rule(:decimal)    { numbers >> str(".").maybe >> numbers.maybe }
-      rule(:percent)    { decimal >> stri("%") >> space? }
-      rule(:length)     { decimal >> stri_list(UNITS) >> space?  }
-      rule(:identifier) { match["a-zA-Z"].repeat(1) }
-      rule(:inherit)    { stri("inherit") }
-      rule(:eof)        { any.absent? }
-      rule(:nada)       { any.repeat.as(:nada) }
+      rule(:space)           { match['\s'].repeat(1) }
+      rule(:space?)          { space.maybe }
+      rule(:number)          { match["0-9"] }
+      rule(:numbers)         { number.repeat(1) }
+      rule(:decimal)         { numbers >> str(".").maybe >> numbers.maybe }
+      rule(:percent)         { decimal >> stri("%") >> space? }
+      rule(:non_zero_length) { decimal >> stri_list(UNITS) >> space?  }
+      rule(:zero_length)     { match["0"] }
+      rule(:length)          { zero_length | non_zero_length }
+      rule(:identifier)      { match["a-zA-Z"].repeat(1) }
+      rule(:inherit)         { stri("inherit") }
+      rule(:eof)             { any.absent? }
+      rule(:nada)            { any.repeat.as(:nada) }
 
       rule(:http) {
         (match['a-zA-Z0-9.:/\-'] | str('\(') | str('\)')).repeat >> space?

@@ -106,6 +106,8 @@ module Csscss::Parser
         @parser.length.must_parse "123px"
         @parser.length.must_parse "123EM"
         @parser.length.must_parse "1.23Pt"
+        @parser.length.must_parse "0"
+        @parser.length.wont_parse "1"
       end
     end
 
