@@ -31,7 +31,7 @@ module Csscss
         stri("url") >> parens do
           (any_quoted { http } >> space?) |
           (any_quoted { data } >> space?) |
-          http
+          data | http
         end
       }
 

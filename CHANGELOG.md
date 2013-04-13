@@ -2,6 +2,7 @@
 
 * 0 and 0px are now reconciled as redundancies
 * Disables color support by default for windows & ruby < 2.0
+* Fixes bug where unquoted url(data...) isn't parsed correctly
 
 ## 1.1.0 - 4/12/2013 ##
 
