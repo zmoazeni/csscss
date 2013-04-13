@@ -3,7 +3,7 @@ module Csscss
     def initialize(argv)
       @argv               = argv
       @verbose            = false
-      @color              = true
+      @color              = !windows_1_9
       @minimum            = 3
       @compass            = false
       @ignored_properties = []
@@ -80,7 +80,7 @@ module Csscss
           @verbose = v
         end
 
-        opts.on("--[no-]color", "Colorize output (default is true)") do |c|
+        opts.on("--[no-]color", "Colorize output (default is #{@color})") do |c|
           @color = c
         end
 
@@ -153,6 +153,10 @@ module Csscss
       end
     rescue LoadError
       abort "Must install compass gem before enabling its extensions"
+    end
+
+    def windows_1_9
+      RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/ && RUBY_VERSION =~ /^1\.9/
     end
 
     class << self

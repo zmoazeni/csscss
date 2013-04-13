@@ -1,6 +1,7 @@
 ## (Unreleased)
 
 * 0 and 0px are now reconciled as redundancies
+* Disables color support by default for windows & ruby < 2.0
 
 ## 1.1.0 - 4/12/2013 ##
 
