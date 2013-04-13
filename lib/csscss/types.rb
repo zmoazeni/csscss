@@ -36,20 +36,17 @@ module Csscss
       end
     end
 
-    def normalize_value(value)
-      value = value.to_s.strip
-      return value if value.nil?
-
-      zero_regex_matches = value.match(/^(0)(.*)/)
-      if zero_regex_matches && zero_regex_matches.length
-        zero_regex_matches[1] # "0"
+    def normalized_value
+      zero_units = Csscss::Parser::Common::UNITS.map {|u| '0' + u}
+      if zero_units.include? value
+        "0"
       else
         value
       end
     end
 
     def hash
-      [property, normalize_value(value)].hash
+      [property, normalized_value].hash
     end
 
     def eql?(other)

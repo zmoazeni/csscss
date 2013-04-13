@@ -184,6 +184,15 @@ module Csscss
       })
     end
 
+    it "doesn't match shorthand when explicitly turned off" do
+      css = %$
+        .foo { background-color: #fff }
+        .bar { background: #fff }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies(match_shorthand:false).must_equal({})
+    end
+
     it "3-way case consolidation" do
       css = %$
         .bar { background: #fff }

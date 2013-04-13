@@ -1,4 +1,8 @@
-## (Unreleased) ##
+## Unreleased ##
+
+* Fixes bug where 0 and 0px are not reconciled as redundancies
+
+## 1.1.0 - 4/12/2013 ##
 
 * Fixes bug where CLI --no-color wasn't respected
 * Added ruby version requirement for >= 1.9
@@ -11,7 +15,7 @@
 * Adds --compass-with-config that lets users specify a config
 * Fixes parser error bug when trying to parse blank files
 * Fixes bug where rules from multiple files aren't consolidated
-* Fixes bug where 0 and 0px are not reconciled as redundancies
+* Adds --no-match-shorthand to allow users to opt out of shorthand matching
 
 ## 1.0.0 - 4/7/2013 ##
 

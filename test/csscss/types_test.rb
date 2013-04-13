@@ -69,5 +69,17 @@ module Csscss
       h[dec2].must_equal true
       h[dec3].must_equal true
     end
+
+    it "stores values of normalized zeros for length units" do
+      dec1 = Declaration.new("padding", "0px")
+
+      dec1.normalized_value.must_equal "0"
+    end
+
+    it "stores values of non-normalized numbers for length units" do
+      dec1 = Declaration.new("padding", "1px")
+
+      dec1.normalized_value.must_equal "1px"
+    end
   end
 end

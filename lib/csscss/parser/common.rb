@@ -3,7 +3,7 @@ module Csscss
     module Common
       include Parslet
 
-      UNITS = %w(px em ex in cm mm pt pc)
+      UNITS = %w(px em ex in cm mm pt pc %)
 
       rule(:space)                { match['\s'].repeat(1) }
       rule(:space?)               { space.maybe }
