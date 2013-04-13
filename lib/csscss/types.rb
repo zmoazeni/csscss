@@ -36,8 +36,17 @@ module Csscss
       end
     end
 
+    def normalized_value
+      zero_units = Csscss::Parser::Common::UNITS.map {|u| '0' + u}
+      if zero_units.include? value
+        "0"
+      else
+        value
+      end
+    end
+
     def hash
-      [property, value].hash
+      [property, normalized_value].hash
     end
 
     def eql?(other)
