@@ -30,7 +30,8 @@ module Csscss
 
     def ==(other)
       if other.respond_to?(:property) && other.respond_to?(:value)
-        eql?(other)
+        # using eql? tanks performance
+        property == other.property && normalize_value(value) == normalize_value(other.value)
       else
         false
       end
