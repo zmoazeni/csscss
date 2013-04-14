@@ -15,42 +15,52 @@ module Csscss
       execute
     end
 
-    def load_sass_file(filename)
+    def gem_installed?(gem_name)
       begin
-        require "sass"
-        rescue LoadError
-          puts "Must install sass gem before parsing sass/scss files"
-          exit 1
-        end
+        require gem_name
+      rescue LoadError
+        return false
+      end
+      true
+    end
 
-        sass_options = {cache:false}
-        sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
-        begin
-          Sass::Engine.for_file(filename, sass_options).render
-          rescue Sass::SyntaxError => e
-          if e.message =~ /compass/ && !@compass
-            puts "Enable --compass option to use compass's extensions"
-            exit 1
-          else
-            raise e
-          end
+    def load_sass_file(filename)
+      if !gem_installed?('sass') then
+        puts "Must install sass gem before parsing sass/scss files"
+        exit 1
+      end
+
+      sass_options = {cache:false}
+      sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
+      begin
+        Sass::Engine.for_file(filename, sass_options).render
+      rescue Sass::SyntaxError => e
+        if e.message =~ /compass/ && !@compass
+          puts "Enable --compass option to use compass's extensions"
+          exit 1
+        else
+          raise e
         end
+      end
     end
 
     def load_less_file(filename)
-      begin
-        require "less"
-      rescue LoadError
-        puts "Must install less gem before parsing less files"           
+      if !gem_installed?('less') then
+        puts "Must install less gem before parsing less files (try \"gem install less\", or add less to your Gemfile)"
         exit 1
       end
 
       begin
-        Less::Parser.new.parse.to_css(filename)
-      rescue ParseError 
+        contents = open(filename) {|f| f.read }
+        Less::Parser.new.parse(contents).to_css         
+      rescue Less::ParseError => e 
         puts "Less parse error"
         exit 1
       end
+    end
+
+    def load_css_file(filename)
+      open(filename) {|f| f.read }
     end
 
     def execute
@@ -59,8 +69,8 @@ module Csscss
           load_sass_file(filename)
         elsif %w(.less).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp) 
           load_less_file(filename)
-        else        
-          open(filename) {|f| f.read }
+        else
+          load_css_file(filename)
         end
 
         RedundancyAnalyzer.new(contents).redundancies(minimum:           @minimum,
