@@ -25,7 +25,13 @@ module Csscss
         rule(:attribute) {
           match["^:{}"].repeat(1).as(:property) >>
           str(":") >>
-          match["^;}"].repeat(1).as(:value) >>
+          (match["^;}"].repeat(1).capture(:stuff) >> dynamic {|source, context|
+            if context.captures[:stuff].to_s =~ /data:/
+              str(";") >> match["^;}"].repeat(1)
+            else
+              any.present?
+            end
+          }).as(:value) >>
           str(";").maybe >>
           space?
         }
