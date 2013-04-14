@@ -16,8 +16,12 @@ module TypeHelpers
     Csscss::Declaration.new(p, v)
   end
 
-  def rs(selectors, decs)
-    Csscss::Ruleset.new(selectors, decs)
+  def rs(selectors, decs, metadata=nil)
+    Csscss::Ruleset.new(selectors, decs, metadata)
+  end
+
+  def md(ln)
+    Csscss::Metadata.new(ln)
   end
 end
 
