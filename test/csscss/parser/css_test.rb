@@ -134,39 +134,6 @@ module Csscss::Parser
           rs(sel("h1"), [dec("display", "none")])
         ])
       end
-
-      it "parses attributes with encoded data that include semicolons" do
-        trans(%$
-            .foo1 {
-              background: rgb(123, 123, 123) url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAACECAYAAABRaEHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHRJREFUeNqkUjESwCAIw+T/X/UHansdkLTQDnXgCAHNEW2tZbDz/Aq994bzqoY5Z8wEwiEcmmfwiRK+EGOMTVBrtz4mY9kEAyz6+E3sJ7MWBs1PaUy1lHLLmgTqElltNxLiINTBbWi0Vj5DZC9CaqZEOwQYAPhxY/7527NfAAAAAElFTkSuQmCC) repeat-x;
-              display: block;
-            }
-
-            .foo2 {
-              background: white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAACECAYAAABRaEHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHRJREFUeNqkUjESwCAIw+T/X/UHansdkLTQDnXgCAHNEW2tZbDz/Aq994bzqoY5Z8wEwiEcmmfwiRK+EGOMTVBrtz4mY9kEAyz6+E3sJ7MWBs1PaUy1lHLLmgTqElltNxLiINTBbWi0Vj5DZC9CaqZEOwQYAPhxY/7527NfAAAAAElFTkSuQmCC) repeat-x
-            }
-
-            .foo3 {
-              outline: 1px;
-              background: white url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAACECAYAAABRaEHiAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHRJREFUeNqkUjESwCAIw+T/X/UHansdkLTQDnXgCAHNEW2tZbDz/Aq994bzqoY5Z8wEwiEcmmfwiRK+EGOMTVBrtz4mY9kEAyz6+E3sJ7MWBs1PaUy1lHLLmgTqElltNxLiINTBbWi0Vj5DZC9CaqZEOwQYAPhxY/7527NfAAAAAElFTkSuQmCC) repeat-x;
-              display: block;
-            }
-
-            .foo4 {
-              background: blue url(images/bg-bolt-inactive.png) no-repeat 99% 5px;
-              display: block;
-            }
-        $).must_equal([
-          rs(sel(".foo1"), [dec("background", "rgb(123, 123, 123) url(data:image/png;base64,ivborw0kggoaaaansuheugaaaaeaaacecayaaabraehiaaaagxrfwhrtb2z0d2fyzqbbzg9izsbjbwfnzvjlywr5ccllpaaaahrjrefuenqkujeswcaiw+t/x/uhansdkltqdnxgcahnew2tzbdz/aq994bzqoy5z8wewiecmmfwirk+egomtvbrtz4my9keayz6+e3sj7mwbs1pauy1lhllmgtqelltnxliintbbwi0vj5dzc9caqzeowqyaphxy/7527nfaaaaaelftksuqmcc) repeat-x"),
-                            dec("display", "block")]),
-          rs(sel(".foo2"), [dec("background", "white url(data:image/png;base64,ivborw0kggoaaaansuheugaaaaeaaacecayaaabraehiaaaagxrfwhrtb2z0d2fyzqbbzg9izsbjbwfnzvjlywr5ccllpaaaahrjrefuenqkujeswcaiw+t/x/uhansdkltqdnxgcahnew2tzbdz/aq994bzqoy5z8wewiecmmfwirk+egomtvbrtz4my9keayz6+e3sj7mwbs1pauy1lhllmgtqelltnxliintbbwi0vj5dzc9caqzeowqyaphxy/7527nfaaaaaelftksuqmcc) repeat-x")]),
-          rs(sel(".foo3"), [dec("outline", "1px"),
-                            dec("background", "white url(data:image/png;base64,ivborw0kggoaaaansuheugaaaaeaaacecayaaabraehiaaaagxrfwhrtb2z0d2fyzqbbzg9izsbjbwfnzvjlywr5ccllpaaaahrjrefuenqkujeswcaiw+t/x/uhansdkltqdnxgcahnew2tzbdz/aq994bzqoy5z8wewiecmmfwirk+egomtvbrtz4my9keayz6+e3sj7mwbs1pauy1lhllmgtqelltnxliintbbwi0vj5dzc9caqzeowqyaphxy/7527nfaaaaaelftksuqmcc) repeat-x"),
-                            dec("display", "block")]),
-          rs(sel(".foo4"), [dec("background", "blue url(images/bg-bolt-inactive.png) no-repeat 99% 5px"),
-                            dec("display", "block")])
-        ])
-      end
     end
   end
 end
