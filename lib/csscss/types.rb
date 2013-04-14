@@ -30,14 +30,14 @@ module Csscss
 
     def ==(other)
       if other.respond_to?(:property) && other.respond_to?(:value)
-        property == other.property && value == other.value
+        eql?(other)
       else
         false
       end
     end
 
     def hash
-      [property, value].hash
+      [property, normalize_value(value)].hash
     end
 
     def eql?(other)
@@ -65,6 +65,15 @@ module Csscss
         "<#{self.class} #{to_s} (parents: #{parents})>"
       else
         "<#{self.class} #{to_s}>"
+      end
+    end
+
+    private
+    def normalize_value(value)
+      if value =~ /^0(#{Csscss::Parser::Common::UNITS.join("|")}|%)$/
+        "0"
+      else
+        value
       end
     end
   end

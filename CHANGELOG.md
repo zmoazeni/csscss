@@ -1,3 +1,24 @@
+## (Unreleased)
+
+* 0 and 0px are now reconciled as redundancies
+* Disables color support by default for windows & ruby < 2.0
+* Fixes bug where unquoted url(data...) isn't parsed correctly
+
+## 1.1.0 - 4/12/2013 ##
+
+* Fixes bug where CLI --no-color wasn't respected
+* Added ruby version requirement for >= 1.9
+* Added CONTRIBUTORS.md
+* Fixes bugs with urls that have dashes in them
+* Fixes bugs with urls containing encoded data (usually images)
+* Deprecates CSSCSS_DEBUG in favor of --show-parser-errors
+* Fixes line/column output during parser errors
+* --compass now grabs config.rb by default if it exists
+* Adds --compass-with-config that lets users specify a config
+* Fixes parser error bug when trying to parse blank files
+* Fixes bug where rules from multiple files aren't consolidated
+* Adds --no-match-shorthand to allow users to opt out of shorthand matching
+
 ## 1.0.0 - 4/7/2013 ##
 
 * Allows the user to specify ignored properties and selectors

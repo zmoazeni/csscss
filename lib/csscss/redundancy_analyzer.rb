@@ -9,6 +9,7 @@ module Csscss
       minimum            = opts[:minimum]
       ignored_properties = opts[:ignored_properties] || []
       ignored_selectors  = opts[:ignored_selectors] || []
+      match_shorthand    = opts.fetch(:match_shorthand, true)
 
       rule_sets = Parser::Css.parse(@raw_css)
       matches = {}
@@ -20,7 +21,7 @@ module Csscss
         rule_set.declarations.each do |dec|
           next if ignored_properties.include?(dec.property)
 
-          if parser = shorthand_parser(dec.property)
+          if match_shorthand && parser = shorthand_parser(dec.property)
             if new_decs = parser.parse(dec.property, dec.value)
               if dec.property == "border"
                 %w(border-top border-right border-bottom border-left).each do |property|
@@ -63,7 +64,6 @@ module Csscss
           end
         end
       end
-
 
       # trims any derivative declarations alongside shorthand
       inverted_matches.each do |selectors, declarations|
