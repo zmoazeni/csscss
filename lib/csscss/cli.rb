@@ -8,7 +8,7 @@ module Csscss
       @compass            = false
       @ignored_properties = []
       @ignored_selectors  = []
-      @match_shorthand   = true
+      @match_shorthand    = true
     end
 
     def run
@@ -16,31 +16,22 @@ module Csscss
       execute
     end
 
+    private
     def execute
       warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
 
-      all_contents = @argv.map do |filename|
-        if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
-          begin
-            require "sass"
-          rescue LoadError
-            abort "Must install sass gem before parsing sass/scss files"
-          end
-
-          sass_options = {cache:false}
-          sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
-          begin
-            Sass::Engine.for_file(filename, sass_options).render
-          rescue Sass::SyntaxError => e
-            if e.message =~ /compass/ && !@compass
-              puts "Enable --compass option to use compass's extensions"
-              exit 1
-            else
-              raise e
-            end
-          end
+      all_contents= @argv.map do |filename|
+        if filename =~ URI.regexp
+          load_css_file(filename)
         else
-          open(filename) {|f| f.read }
+          case File.extname(filename).downcase
+          when ".scss", ".sass"
+            load_sass_file(filename)
+          when ".less"
+            load_less_file(filename)
+          else
+            load_css_file(filename)
+          end
         end
       end.join("\n")
 
@@ -133,7 +124,6 @@ module Csscss
       print_help(opts)
     end
 
-    private
     def print_help(opts)
       puts opts
       exit
@@ -157,6 +147,47 @@ module Csscss
 
     def windows_1_9
       RbConfig::CONFIG['host_os'] =~ /mswin|mingw|cygwin/ && RUBY_VERSION =~ /^1\.9/
+    end
+
+    def gem_installed?(gem_name)
+      begin
+        require gem_name
+        true
+      rescue LoadError
+        false
+      end
+    end
+
+    def load_sass_file(filename)
+      if !gem_installed?("sass") then
+        abort 'Must install the "sass" gem before parsing sass/scss files'
+      end
+
+      sass_options = {cache:false}
+      sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
+      begin
+        Sass::Engine.for_file(filename, sass_options).render
+      rescue Sass::SyntaxError => e
+        if e.message =~ /compass/ && !@compass
+          puts "Enable --compass option to use compass's extensions"
+          exit 1
+        else
+          raise e
+        end
+      end
+    end
+
+    def load_less_file(filename)
+      if !gem_installed?("less") then
+        abort 'Must install the "less" gem before parsing less files'
+      end
+
+      contents = load_css_file(filename)
+      Less::Parser.new.parse(contents).to_css
+    end
+
+    def load_css_file(filename)
+      open(filename) {|f| f.read }
     end
 
     class << self

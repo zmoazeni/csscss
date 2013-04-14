@@ -45,11 +45,20 @@ rulesets that have fewer matches.
 
     $ csscss -n 10 -v path/to/style.css # ignores rulesets with < 10 matches
 
-If you prefer writing in sass, you can also parse your sass/scss files.
+If you prefer writing in [sass](http://sass-lang.com/), you can also parse your sass/scss files.
 
     $ gem install sass
     $ csscss path/to/style.scss
 
+If you prefer writing in [LESS](http://lesscss.org/), you can also parse your LESS files.
+
+    $ gem install less
+    $ csscss path/to/style.less
+
+LESS requires an additional javascript runtime.
+[v8/therubyracer](https://rubygems.org/gems/therubyracer) on most
+rubies, and [therubyrhino](https://rubygems.org/gems/therubyrhino) on
+jruby.
 
 ## I found bugs ##
 
