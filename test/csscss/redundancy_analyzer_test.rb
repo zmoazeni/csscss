@@ -68,7 +68,7 @@ module Csscss
         .baz {
           margin: 3px 3px 30px 3px;
           padding: 10px 30px;
-          background: white url(images/bg-bolt-inactive.png) no-repeat 99% 5px;
+          background: blue url(images/bg-bolt-inactive.png) no-repeat 99% 5px;
 
           -webkit-border-radius: 4px;
           -moz-border-radius: 4px;
@@ -184,6 +184,15 @@ module Csscss
       })
     end
 
+    it "doesn't match shorthand when explicitly turned off" do
+      css = %$
+        .foo { background-color: #fff }
+        .bar { background: #fff }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies(match_shorthand:false).must_equal({})
+    end
+
     it "3-way case consolidation" do
       css = %$
         .bar { background: #fff }
@@ -265,6 +274,18 @@ module Csscss
         [sel(".bar"), sel("h1, h2")] => [dec("position", "relative")]
       })
     end
+
+    it "matches 0 and 0px" do
+      css = %$
+        .bar { padding: 0; }
+        .foo { padding: 0px; }
+      $
+
+      RedundancyAnalyzer.new(css).redundancies.must_equal({
+        [sel(".bar"), sel(".foo")] => [dec("padding", "0")]
+      })
+    end
+
 
     # TODO: someday
     # it "reports duplication within the same selector" do
