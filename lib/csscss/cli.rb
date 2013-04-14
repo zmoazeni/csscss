@@ -16,31 +16,64 @@ module Csscss
       execute
     end
 
+    def gem_installed?(gem_name)
+      begin
+        require gem_name
+      rescue LoadError
+        return false
+      end
+      true
+    end
+
+    def load_sass_file(filename)
+      if !gem_installed?('sass') then
+        puts "Must install sass gem before parsing sass/scss files"
+        exit 1
+      end
+
+      sass_options = {cache:false}
+      sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
+      begin
+        Sass::Engine.for_file(filename, sass_options).render
+      rescue Sass::SyntaxError => e
+        if e.message =~ /compass/ && !@compass
+          puts "Enable --compass option to use compass's extensions"
+          exit 1
+        else
+          raise e
+        end
+      end
+    end
+
+    def load_less_file(filename)
+      if !gem_installed?('less') then
+        puts "Must install less gem before parsing less files (try \"gem install less\", or add less to your Gemfile)"
+        exit 1
+      end
+
+      begin
+        contents = open(filename) {|f| f.read }
+        Less::Parser.new.parse(contents).to_css         
+      rescue Less::ParseError => e 
+        puts "Less parse error"
+        exit 1
+      end
+    end
+
+    def load_css_file(filename)
+      open(filename) {|f| f.read }
+    end
+
     def execute
       warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
 
-      all_contents = @argv.map do |filename|
+      all_contents= @argv.map do |filename|
         if %w(.scss .sass).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp)
-          begin
-            require "sass"
-          rescue LoadError
-            abort "Must install sass gem before parsing sass/scss files"
-          end
-
-          sass_options = {cache:false}
-          sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
-          begin
-            Sass::Engine.for_file(filename, sass_options).render
-          rescue Sass::SyntaxError => e
-            if e.message =~ /compass/ && !@compass
-              puts "Enable --compass option to use compass's extensions"
-              exit 1
-            else
-              raise e
-            end
-          end
+          load_sass_file(filename)
+        elsif %w(.less).include?(File.extname(filename).downcase) && !(filename =~ URI.regexp) 
+          load_less_file(filename)
         else
-          open(filename) {|f| f.read }
+          load_css_file(filename)
         end
       end.join("\n")
 
