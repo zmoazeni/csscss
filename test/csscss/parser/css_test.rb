@@ -156,6 +156,28 @@ module Csscss::Parser
         ])
       end
 
+      it "ignores mixin selectors" do
+        css = %$
+        h1 {
+          /* CSSCSS START MIXIN: foo */
+          font-family: serif;
+          font-size: 10px;
+          display: block;
+          /* CSSCSS END MIXIN: foo */
+
+          /* CSSCSS START MIXIN: bar */
+          outline: 1px;
+          /* CSSCSS END MIXIN: bar */
+
+          float: left;
+        }
+        $
+
+        trans(css).must_equal([
+          rs(sel("h1"), [dec("float", "left")])
+        ])
+      end
+
       it "parses attributes with encoded data that include semicolons" do
         trans(%$
             .foo1 {

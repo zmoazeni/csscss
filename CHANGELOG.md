@@ -3,6 +3,7 @@
 * Adds --require switch for user configuration
 * Deprecates --compass-with-config config.rb in favor of --compass --require config.rb
 * Ignores @import statements. Users will need to run csscss on those directly
+* Adds --ignore-sass-mixins which won't match declarations coming from sass mixins
 
 ## 1.2.0 - 4/14/2013 ##
 

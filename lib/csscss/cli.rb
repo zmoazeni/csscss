@@ -9,6 +9,7 @@ module Csscss
       @ignored_properties = []
       @ignored_selectors  = []
       @match_shorthand    = true
+      @ignore_sass_mixins = false
     end
 
     def run
@@ -85,6 +86,12 @@ module Csscss
 
         opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
           @json = j
+        end
+
+        opts.on("--ignore-sass-mixins", "EXPERIMENTAL: Ignore matches that come from including sass/scss mixins",
+                "This is an experimental feature and may not be included in future releases",
+                "(default is false)") do |ignore|
+          @ignore_sass_mixins = ignore
         end
 
         opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
@@ -169,7 +176,12 @@ module Csscss
       sass_options = {cache:false}
       sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
       begin
-        Sass::Engine.for_file(filename, sass_options).render
+        tree = Sass::Engine.for_file(filename, sass_options).to_tree
+        if @ignore_sass_mixins
+          require "csscss/sass_include_extensions"
+          Csscss::SassMixinVisitor.visit(tree)
+        end
+        tree.render
       rescue Sass::SyntaxError => e
         if e.message =~ /compass/ && !@compass
           puts "Enable --compass option to use compass's extensions"

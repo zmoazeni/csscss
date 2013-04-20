@@ -36,12 +36,30 @@ module Csscss
           space?
         }
 
+        rule(:mixin_attributes) {
+          (
+            str('/* CSSCSS START MIXIN') >>
+            (str('*/').absent? >> any).repeat >>
+            str('*/') >>
+            (str('/* CSSCSS END MIXIN').absent? >> any).repeat >>
+            str('/* CSSCSS END MIXIN') >>
+            (str('*/').absent? >> any).repeat >>
+            str('*/') >>
+            space?
+          ).as(:mixin)
+        }
+
         rule(:ruleset) {
           (
             match["^{}"].repeat(1).as(:selector) >>
             str("{") >>
             space? >>
-            (comment | attribute | blank_attribute).repeat(0).as(:properties) >>
+            (
+              mixin_attributes |
+              comment          |
+              attribute        |
+              blank_attribute
+            ).repeat(0).as(:properties) >>
             str("}") >>
             space?
           ).as(:ruleset)
@@ -85,6 +103,7 @@ module Csscss
         }
 
         rule(import: simple(:import)) { [] }
+        rule(mixin: simple(:mixin)) { nil }
 
         rule(comment: simple(:comment)) { nil }
 
