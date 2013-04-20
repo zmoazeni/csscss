@@ -71,25 +71,20 @@ module Csscss
           @verbose = v
         end
 
-        opts.on("--[no-]color", "Colorize output (default is #{@color})") do |c|
+        opts.on("--[no-]color", "Colorize output", "(default is #{@color})") do |c|
           @color = c
         end
 
-        opts.on("-n", "--num N", Integer, "Print matches with at least this many rules. Defaults to 3") do |n|
+        opts.on("-n", "--num N", Integer, "Print matches with at least this many rules.", "(default is 3)") do |n|
           @minimum = n
         end
 
-        opts.on("--ignore-properties property1,property2,...", Array, "Ignore these properties when finding matches") do |ignored_properties|
-          @ignored_properties = ignored_properties
+        opts.on("--[no-]match-shorthand", "Expand shorthand rules and matches on explicit rules", "(default is true)") do |match_shorthand|
+          @match_shorthand = match_shorthand
         end
 
-        opts.on('--ignore-selectors "selector1","selector2",...', Array, "Ignore these selectors when finding matches") do |ignored_selectors|
-          @ignored_selectors = ignored_selectors
-        end
-
-        opts.on("-V", "--version", "Show version") do |v|
-          puts opts.ver
-          exit
+        opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
+          @json = j
         end
 
         opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
@@ -108,16 +103,21 @@ module Csscss
           load file
         end
 
-        opts.on("--[no-]match-shorthand", "Expands shorthand rules and matches on explicit rules (default is true)") do |match_shorthand|
-          @match_shorthand = match_shorthand
+        opts.on("--ignore-properties property1,property2,...", Array, "Ignore these properties when finding matches") do |ignored_properties|
+          @ignored_properties = ignored_properties
         end
 
-        opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
-          @json = j
+        opts.on('--ignore-selectors "selector1","selector2",...', Array, "Ignore these selectors when finding matches") do |ignored_selectors|
+          @ignored_selectors = ignored_selectors
         end
 
         opts.on("--show-parser-errors", "Print verbose parser errors") do |show_parser_errors|
           @show_parser_errors = show_parser_errors
+        end
+
+        opts.on("-V", "--version", "Show version") do |v|
+          puts opts.ver
+          exit
         end
 
         opts.on_tail("-h", "--help", "Show this message") do
