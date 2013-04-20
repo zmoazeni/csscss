@@ -104,7 +104,7 @@ module Csscss::Parser
         ])
       end
 
-      it "recognizes media queries" do
+      it "recognizes @media queries" do
         css = %$
           @media only screen {
             /* some comment */
@@ -129,9 +129,52 @@ module Csscss::Parser
         ])
       end
 
+      it "ignores @import statements" do
+        css = %$
+          @import "foo.css";
+          @import "bar.css";
+
+          /*
+          .x {
+              padding: 3px;
+          }
+          */
+
+          h1 {
+            outline: 1px;
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel("h1"), [dec("outline", "1px")])
+        ])
+      end
+
       it "ignores double semicolons" do
         trans("h1 { display:none;;}").must_equal([
           rs(sel("h1"), [dec("display", "none")])
+        ])
+      end
+
+      it "ignores mixin selectors" do
+        css = %$
+        h1 {
+          /* CSSCSS START MIXIN: foo */
+          font-family: serif;
+          font-size: 10px;
+          display: block;
+          /* CSSCSS END MIXIN: foo */
+
+          /* CSSCSS START MIXIN: bar */
+          outline: 1px;
+          /* CSSCSS END MIXIN: bar */
+
+          float: left;
+        }
+        $
+
+        trans(css).must_equal([
+          rs(sel("h1"), [dec("float", "left")])
         ])
       end
 

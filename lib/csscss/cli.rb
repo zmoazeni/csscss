@@ -9,6 +9,7 @@ module Csscss
       @ignored_properties = []
       @ignored_selectors  = []
       @match_shorthand    = true
+      @ignore_sass_mixins = false
     end
 
     def run
@@ -18,7 +19,7 @@ module Csscss
 
     private
     def execute
-      warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
+      deprecate("Use --show-parser-errors instead of CSSCSS_DEBUG") if ENV["CSSCSS_DEBUG"]
 
       all_contents= @argv.map do |filename|
         if filename =~ URI.regexp
@@ -71,12 +72,42 @@ module Csscss
           @verbose = v
         end
 
-        opts.on("--[no-]color", "Colorize output (default is #{@color})") do |c|
+        opts.on("--[no-]color", "Colorize output", "(default is #{@color})") do |c|
           @color = c
         end
 
-        opts.on("-n", "--num N", Integer, "Print matches with at least this many rules. Defaults to 3") do |n|
+        opts.on("-n", "--num N", Integer, "Print matches with at least this many rules.", "(default is 3)") do |n|
           @minimum = n
+        end
+
+        opts.on("--[no-]match-shorthand", "Expand shorthand rules and matches on explicit rules", "(default is true)") do |match_shorthand|
+          @match_shorthand = match_shorthand
+        end
+
+        opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
+          @json = j
+        end
+
+        opts.on("--ignore-sass-mixins", "EXPERIMENTAL: Ignore matches that come from including sass/scss mixins",
+                "This is an experimental feature and may not be included in future releases",
+                "(default is false)") do |ignore|
+          @ignore_sass_mixins = ignore
+        end
+
+        opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
+          enable_compass if @compass = compass
+        end
+
+        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file",
+                "DEPRECATED: use --compass --require path/to/config.rb instead."
+               ) do |config|
+          deprecate("Use --compass --require #{config} instead of --compass-with-config #{config}")
+          @compass = true
+          enable_compass(config)
+        end
+
+        opts.on("--require file.rb", "Load ruby file before running csscss.", "Great for bootstrapping requires/configurations") do |file|
+          load file
         end
 
         opts.on("--ignore-properties property1,property2,...", Array, "Ignore these properties when finding matches") do |ignored_properties|
@@ -87,30 +118,13 @@ module Csscss
           @ignored_selectors = ignored_selectors
         end
 
+        opts.on("--show-parser-errors", "Print verbose parser errors") do |show_parser_errors|
+          @show_parser_errors = show_parser_errors
+        end
+
         opts.on("-V", "--version", "Show version") do |v|
           puts opts.ver
           exit
-        end
-
-        opts.on("--[no-]compass", "Enable compass extensions when parsing sass/scss (default is false)") do |compass|
-          enable_compass if @compass = compass
-        end
-
-        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file") do |config|
-          @compass = true
-          enable_compass(config)
-        end
-
-        opts.on("--[no-]match-shorthand", "Expands shorthand rules and matches on explicit rules (default is true)") do |match_shorthand|
-          @match_shorthand = match_shorthand
-        end
-
-        opts.on("-j", "--[no-]json", "Output results in JSON") do |j|
-          @json = j
-        end
-
-        opts.on("--show-parser-errors", "Print verbose parser errors") do |show_parser_errors|
-          @show_parser_errors = show_parser_errors
         end
 
         opts.on_tail("-h", "--help", "Show this message") do
@@ -129,20 +143,18 @@ module Csscss
       exit
     end
 
-    def warn_old_debug_flag
-      $stderr.puts "CSSCSS_DEBUG is now deprecated. Use --show-parser-errors instead".red
+    def deprecate(message)
+      $stderr.puts("DEPRECATED: #{message}".yellow)
     end
 
     def enable_compass(config = nil)
-      require "compass"
+      abort 'Must install the "compass" gem before enabling its extensions' unless gem_installed?("compass")
 
       if config
         Compass.add_configuration(config)
       else
         Compass.add_configuration("config.rb") if File.exist?("config.rb")
       end
-    rescue LoadError
-      abort "Must install compass gem before enabling its extensions"
     end
 
     def windows_1_9
@@ -159,14 +171,17 @@ module Csscss
     end
 
     def load_sass_file(filename)
-      if !gem_installed?("sass") then
-        abort 'Must install the "sass" gem before parsing sass/scss files'
-      end
+      abort 'Must install the "sass" gem before parsing sass/scss files' unless gem_installed?("sass")
 
       sass_options = {cache:false}
       sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
       begin
-        Sass::Engine.for_file(filename, sass_options).render
+        tree = Sass::Engine.for_file(filename, sass_options).to_tree
+        if @ignore_sass_mixins
+          require "csscss/sass_include_extensions"
+          Csscss::SassMixinVisitor.visit(tree)
+        end
+        tree.render
       rescue Sass::SyntaxError => e
         if e.message =~ /compass/ && !@compass
           puts "Enable --compass option to use compass's extensions"
@@ -178,10 +193,7 @@ module Csscss
     end
 
     def load_less_file(filename)
-      if !gem_installed?("less") then
-        abort 'Must install the "less" gem before parsing less files'
-      end
-
+      abort 'Must install the "less" gem before parsing less files' unless gem_installed?("less")
       contents = load_css_file(filename)
       Less::Parser.new.parse(contents).to_css
     end

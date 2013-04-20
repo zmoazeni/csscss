@@ -1,0 +1,45 @@
+require "test_helper"
+require "csscss/sass_include_extensions"
+
+module Csscss
+  describe "sass import extensions" do
+    it "should do something" do
+      scss =<<-SCSS
+      @mixin foo {
+        font: {
+          family: serif;
+          size: 10px;
+        }
+
+        display: block;
+      }
+
+      @mixin bar {
+        outline: 1px;
+      }
+
+      h1 {
+        @include foo;
+        @include bar;
+      }
+      SCSS
+
+
+      css =<<-CSS
+h1 {
+  /* CSSCSS START MIXIN: foo */
+  font-family: serif;
+  font-size: 10px;
+  display: block;
+  /* CSSCSS END MIXIN: foo */
+  /* CSSCSS START MIXIN: bar */
+  outline: 1px;
+  /* CSSCSS END MIXIN: bar */ }
+      CSS
+
+      tree = Sass::Engine.new(scss, syntax: :scss).to_tree
+      Csscss::SassMixinVisitor.visit(tree)
+      tree.render.must_equal(css)
+    end
+  end
+end
