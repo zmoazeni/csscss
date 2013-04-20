@@ -58,8 +58,22 @@ module Csscss
           ).as(:nested_ruleset)
         }
 
+        rule(:import) {
+          (
+            stri("@import") >>
+            match["^;"].repeat(1) >>
+            str(";") >>
+            space?
+          ).as(:import)
+        }
+
         rule(:blocks) {
-          space? >> (comment | nested_ruleset | ruleset).repeat(1).as(:blocks) >> space?
+          space? >> (
+            comment        |
+            import         |
+            nested_ruleset |
+            ruleset
+          ).repeat(1).as(:blocks) >> space?
         }
 
         root(:blocks)
@@ -69,6 +83,8 @@ module Csscss
         rule(nested_ruleset: sequence(:rulesets)) {
           rulesets
         }
+
+        rule(import: simple(:import)) { [] }
 
         rule(comment: simple(:comment)) { nil }
 

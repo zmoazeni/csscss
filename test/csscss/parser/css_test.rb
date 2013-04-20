@@ -104,7 +104,7 @@ module Csscss::Parser
         ])
       end
 
-      it "recognizes media queries" do
+      it "recognizes @media queries" do
         css = %$
           @media only screen {
             /* some comment */
@@ -125,6 +125,27 @@ module Csscss::Parser
         trans(css).must_equal([
           rs(sel("#foo"), [dec("background-color", "black")]),
           rs(sel("#bar"), [dec("display", "none")]),
+          rs(sel("h1"), [dec("outline", "1px")])
+        ])
+      end
+
+      it "ignores @import statements" do
+        css = %$
+          @import "foo.css";
+          @import "bar.css";
+
+          /*
+          .x {
+              padding: 3px;
+          }
+          */
+
+          h1 {
+            outline: 1px;
+          }
+        $
+
+        trans(css).must_equal([
           rs(sel("h1"), [dec("outline", "1px")])
         ])
       end
