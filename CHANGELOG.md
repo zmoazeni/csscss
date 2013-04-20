@@ -1,6 +1,7 @@
 ## (Unreleased) ##
 
 * Adds --require switch for user configuration
+* Deprecates --compass-with-config config.rb in favor of --compass --require config.rb
 
 ## 1.2.0 - 4/14/2013 ##
 

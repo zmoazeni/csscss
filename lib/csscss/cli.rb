@@ -18,7 +18,7 @@ module Csscss
 
     private
     def execute
-      warn_old_debug_flag if ENV["CSSCSS_DEBUG"]
+      deprecate("Use --show-parser-errors instead of CSSCSS_DEBUG") if ENV["CSSCSS_DEBUG"]
 
       all_contents= @argv.map do |filename|
         if filename =~ URI.regexp
@@ -96,7 +96,10 @@ module Csscss
           enable_compass if @compass = compass
         end
 
-        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file") do |config|
+        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file",
+                "DEPRECATED: use --compass --require path/to/config.rb instead."
+               ) do |config|
+          deprecate("Use --compass --require #{config} instead of --compass-with-config #{config}")
           @compass = true
           enable_compass(config)
         end
@@ -133,8 +136,8 @@ module Csscss
       exit
     end
 
-    def warn_old_debug_flag
-      $stderr.puts "CSSCSS_DEBUG is now deprecated. Use --show-parser-errors instead".red
+    def deprecate(message)
+      $stderr.puts("DEPRECATED: #{message}".yellow)
     end
 
     def enable_compass(config = nil)
