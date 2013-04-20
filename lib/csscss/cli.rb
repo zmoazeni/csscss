@@ -141,15 +141,13 @@ module Csscss
     end
 
     def enable_compass(config = nil)
-      require "compass"
+      abort 'Must install the "compass" gem before enabling its extensions' unless gem_installed?("compass")
 
       if config
         Compass.add_configuration(config)
       else
         Compass.add_configuration("config.rb") if File.exist?("config.rb")
       end
-    rescue LoadError
-      abort "Must install compass gem before enabling its extensions"
     end
 
     def windows_1_9
@@ -166,9 +164,7 @@ module Csscss
     end
 
     def load_sass_file(filename)
-      if !gem_installed?("sass") then
-        abort 'Must install the "sass" gem before parsing sass/scss files'
-      end
+      abort 'Must install the "sass" gem before parsing sass/scss files' unless gem_installed?("sass")
 
       sass_options = {cache:false}
       sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
@@ -185,10 +181,7 @@ module Csscss
     end
 
     def load_less_file(filename)
-      if !gem_installed?("less") then
-        abort 'Must install the "less" gem before parsing less files'
-      end
-
+      abort 'Must install the "less" gem before parsing less files' unless gem_installed?("less")
       contents = load_css_file(filename)
       Less::Parser.new.parse(contents).to_css
     end
