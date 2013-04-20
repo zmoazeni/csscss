@@ -101,6 +101,10 @@ module Csscss
           enable_compass(config)
         end
 
+        opts.on("--require file.rb", "Load ruby file before running csscss.", "Great for bootstrapping requires/configurations") do |file|
+          load file
+        end
+
         opts.on("--[no-]match-shorthand", "Expands shorthand rules and matches on explicit rules (default is true)") do |match_shorthand|
           @match_shorthand = match_shorthand
         end

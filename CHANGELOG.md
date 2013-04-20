@@ -1,3 +1,7 @@
+## (Unreleased) ##
+
+* Adds --require switch for user configuration
+
 ## 1.2.0 - 4/14/2013 ##
 
 * 0 and 0px are now reconciled as redundancies
