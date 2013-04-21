@@ -23,14 +23,14 @@ module Csscss::Parser
         end
 
         it "parses comments" do
-          @parser.css_space?.must_parse "/* foo */"
-          @parser.css_space?.must_parse %$
+          @parser.comment.must_parse "/* foo */"
+          @parser.comment.must_parse %$
           /* foo
            * bar
            */
           $
 
-          @parser.css_space?.must_parse %$
+          @parser.comment.repeat(1).must_parse %$
             /* foo */
             /* bar */
           $
@@ -63,11 +63,13 @@ module Csscss::Parser
           */
           .bar { border: 1px solid black /* sdflk */ }
           .baz { background: white /* sdflk */ }
+          .baz2 { background: white /* {sdflk} */ }
         $
 
         trans(css).must_equal([
           rs(sel(".bar"), [dec("border", "1px solid black /* sdflk */")]),
-          rs(sel(".baz"), [dec("background", "white /* sdflk */")])
+          rs(sel(".baz"), [dec("background", "white /* sdflk */")]),
+          rs(sel(".baz2"), [dec("background", "white /* {sdflk} */")])
         ])
       end
 

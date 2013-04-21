@@ -12,26 +12,22 @@ module Csscss
       class Parser < Parslet::Parser
         include Common
 
-        rule(:comment) {
-          (space? >> str('/*') >> (str('*/').absent? >> any).repeat >> str('*/') >> space?).as(:comment)
+        rule(:raw_comment) {
+          space? >> str('/*') >> (str('*/').absent? >> any).repeat >> str('*/') >> space?
         }
-
-        rule(:css_space?) {
-          comment.repeat(1) | space?
-        }
+        rule(:comment) { raw_comment.as(:comment) }
 
         rule(:blank_attribute) { str(";") >> space? }
+
+        rule(:attribute_value) { (str('/*').absent? >> match["^;}"]) | raw_comment }
 
         rule(:attribute) {
           match["^:{}"].repeat(1).as(:property) >>
           str(":") >>
-          (match["^;}"].repeat(1).capture(:stuff) >> dynamic {|source, context|
-            if context.captures[:stuff].to_s =~ /data:/
-              str(";") >> match["^;}"].repeat(1)
-            else
-              any.present?
-            end
-          }).as(:value) >>
+          (
+            (stri("data:").absent? >> attribute_value) |
+            (stri("data:").present? >> attribute_value.repeat(1) >> str(";") >> attribute_value.repeat(1))
+          ).repeat(1).as(:value) >>
           str(";").maybe >>
           space?
         }

@@ -1,3 +1,7 @@
+## (Unreleased) ##
+
+* Fixes attribute parsing bug that includes comments with braces
+
 ## 1.3.1 - 4/20/2013 ##
 
 * Fixes --ignore-sass-mixins bug with @importing
