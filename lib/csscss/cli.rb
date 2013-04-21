@@ -172,16 +172,12 @@ module Csscss
 
     def load_sass_file(filename)
       abort 'Must install the "sass" gem before parsing sass/scss files' unless gem_installed?("sass")
+      require "csscss/sass_include_extensions" if @ignore_sass_mixins
 
       sass_options = {cache:false}
       sass_options[:load_paths] = Compass.configuration.sass_load_paths if @compass
       begin
-        tree = Sass::Engine.for_file(filename, sass_options).to_tree
-        if @ignore_sass_mixins
-          require "csscss/sass_include_extensions"
-          Csscss::SassMixinVisitor.visit(tree)
-        end
-        tree.render
+        Sass::Engine.for_file(filename, sass_options).render
       rescue Sass::SyntaxError => e
         if e.message =~ /compass/ && !@compass
           puts "Enable --compass option to use compass's extensions"
