@@ -3,7 +3,7 @@ require "csscss/sass_include_extensions"
 
 module Csscss
   describe "sass import extensions" do
-    it "should do something" do
+    it "should add comments before and after mixin properties" do
       scss =<<-SCSS
       @mixin foo {
         font: {
