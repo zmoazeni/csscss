@@ -64,6 +64,13 @@ LESS requires an additional javascript runtime.
 rubies, and [therubyrhino](https://rubygems.org/gems/therubyrhino) on
 jruby.
 
+## Why doesn't csscss automatically remove duplications for me? ##
+
+I have been asked this a lot, but csscss is intentionally designed this
+way. Check out [this
+post](http://connectionrequired.com/blog/2013/04/why-csscss-doesnt-remove-duplication-for-you/)
+for my reasoning.
+
 ## I found bugs ##
 
 This is still a new and evolving project. I heartily welcome feedback.
