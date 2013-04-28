@@ -1,9 +1,10 @@
 require "test_helper"
+require "tempfile"
 require "csscss/sass_include_extensions"
 
 module Csscss
   describe "sass import extensions" do
-    it "should do something" do
+    it "should add comments before and after mixin properties" do
       scss =<<-SCSS
       @mixin foo {
         font: {
@@ -37,9 +38,31 @@ h1 {
   /* CSSCSS END MIXIN: bar */ }
       CSS
 
-      tree = Sass::Engine.new(scss, syntax: :scss).to_tree
-      Csscss::SassMixinVisitor.visit(tree)
-      tree.render.must_equal(css)
+      Sass::Engine.new(scss, syntax: :scss, cache: false).render.must_equal(css)
+    end
+
+    it "should insert comments even with imported stylesheets" do
+      Tempfile.open(['foo', '.scss']) do |f|
+        f << <<-SCSS
+          @mixin foo {
+            outline: 1px;
+          }
+
+          h1 {
+            @include foo;
+          }
+        SCSS
+        f.close
+
+        css =<<-CSS
+h1 {
+  /* CSSCSS START MIXIN: foo */
+  outline: 1px;
+  /* CSSCSS END MIXIN: foo */ }
+      CSS
+
+        Sass::Engine.new("@import '#{f.path}'", syntax: :scss, cache: false).render.must_equal(css)
+      end
     end
   end
 end
