@@ -131,6 +131,27 @@ module Csscss::Parser
         ])
       end
 
+      it "recognizes empty @media queries with no spaces" do
+        css = %$
+          @media (min-width: 768px) and (max-width: 979px) {}
+        $
+
+        trans(css).must_equal([
+          rs(sel("@media (min-width: 768px) and (max-width: 979px)"), []),
+        ])
+      end
+
+      it "recognizes empty @media queries with spaces" do
+        css = %$
+          @media (min-width: 768px) and (max-width: 979px) {
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel("@media (min-width: 768px) and (max-width: 979px)"), []),
+        ])
+      end
+
       it "ignores @import statements" do
         css = %$
           @import "foo.css";
