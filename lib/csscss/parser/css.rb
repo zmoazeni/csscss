@@ -66,7 +66,7 @@ module Csscss
             str("@") >>
             match["^{}"].repeat(1) >>
             str("{") >>
-            (comment | ruleset).repeat(0) >>
+            (comment | ruleset).repeat(1) >>
             str("}") >>
             space?
           ).as(:nested_ruleset)
