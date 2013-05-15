@@ -212,6 +212,39 @@ module Csscss::Parser
                             dec("display", "block")])
         ])
       end
+
+      it "parses attributes with special characters" do
+        css = %$
+
+        #menu a::before {
+            content: "{";
+            left: -6px;
+        }
+
+        #menu a::after {
+            content: "}";
+            right: -6px;
+        }
+
+        #menu a::weird {
+            content: "@";
+            up: -2px;
+        }
+
+        $
+
+        trans(css).must_equal([
+          rs(sel("#menu a::before"), [dec("content", '"{"'),
+            dec("left", "-6px")
+            ]),
+          rs(sel("#menu a::after"), [dec("content", '"}"'),
+            dec("right", "-6px")
+            ]),
+          rs(sel("#menu a::weird"), [dec("content", '"@"'),
+              dec("up", "-2px")
+            ])
+        ])
+      end
     end
   end
 end
