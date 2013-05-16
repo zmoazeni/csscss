@@ -19,7 +19,7 @@ module Csscss
 
         rule(:blank_attribute) { str(";") >> space? }
 
-        rule(:attribute_value) { (str('"') >> any >> str('"')) | (str('/*').absent? >> match["^;}"]) | raw_comment }
+        rule(:attribute_value) { (any_quoted {any}) | (str('/*').absent? >> match["^;}"]) | raw_comment }
 
         rule(:attribute) {
           match["^:{}"].repeat(1).as(:property) >>

@@ -144,6 +144,8 @@ module Csscss::Parser
         @parser.between('"', '"') { @parser.symbol("{") }.must_parse '"{"'
         @parser.between('"', '"') { @parser.symbol("}") }.must_parse '"}"'
         @parser.between('"', '"') { @parser.symbol("%") }.must_parse '"%"'
+        @parser.double_quoted { @parser.symbol("{") }.must_parse %("{")
+        @parser.single_quoted { @parser.symbol('{') }.must_parse %('{')
       end
     end
   end

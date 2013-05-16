@@ -231,6 +231,11 @@ module Csscss::Parser
             up: -2px;
         }
 
+        #menu a::after_all {
+            content: '{';
+            right: -6px;
+        }
+
         $
 
         trans(css).must_equal([
@@ -242,6 +247,9 @@ module Csscss::Parser
             ]),
           rs(sel("#menu a::weird"), [dec("content", '"@"'),
               dec("up", "-2px")
+            ]),
+          rs(sel("#menu a::after_all"), [dec("content", "'{'"),
+              dec("right", "-6px")
             ])
         ])
       end
