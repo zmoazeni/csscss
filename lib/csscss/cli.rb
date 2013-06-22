@@ -98,10 +98,7 @@ module Csscss
           enable_compass if @compass = compass
         end
 
-        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file",
-                "DEPRECATED: use --compass --require path/to/config.rb instead."
-               ) do |config|
-          deprecate("Use --compass --require #{config} instead of --compass-with-config #{config}")
+        opts.on("--compass-with-config config", "Enable compass extensions when parsing sass/scss and pass config file") do |config|
           @compass = true
           enable_compass(config)
         end

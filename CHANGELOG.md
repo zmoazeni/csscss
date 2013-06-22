@@ -4,6 +4,7 @@
 * Fixes parsing bug with empty media selectors #67
 * Fixes parsing bug with quoted brackets #72
 * Fixes parsing bug with nested media queries #73
+* Removes --compass-with-config deprecation
 
 ## 1.3.1 - 4/20/2013 ##
 
