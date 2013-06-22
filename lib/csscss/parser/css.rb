@@ -66,7 +66,8 @@ module Csscss
             str("@") >>
             match["^{}"].repeat(1) >>
             str("{") >>
-            (comment | ruleset).repeat(1) >>
+            space? >>
+            (comment | ruleset | nested_ruleset).repeat(1) >>
             str("}") >>
             space?
           ).as(:nested_ruleset)
@@ -94,8 +95,8 @@ module Csscss
       end
 
       class Transformer < Parslet::Transform
-        rule(nested_ruleset: sequence(:rulesets)) {
-          rulesets
+        rule(nested_ruleset: subtree(:rulesets)) { |context|
+          context[:rulesets].flatten
         }
 
         rule(import: simple(:import)) { [] }

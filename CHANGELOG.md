@@ -3,6 +3,7 @@
 * Fixes attribute parsing bug that includes comments with braces
 * Fixes parsing bug with empty media selectors #67
 * Fixes parsing bug with quoted brackets #72
+* Fixes parsing bug with nested media queries #73
 
 ## 1.3.1 - 4/20/2013 ##
 

@@ -119,6 +119,15 @@ module Csscss::Parser
             }
           }
 
+          @media only screen {
+            @-webkit-keyframes webkitSiblingBugfix {
+              from { position: relative; }
+              to { position: relative; }
+            }
+
+            a { position: relative }
+          }
+
           h1 {
             outline: 1px;
           }
@@ -127,6 +136,9 @@ module Csscss::Parser
         trans(css).must_equal([
           rs(sel("#foo"), [dec("background-color", "black")]),
           rs(sel("#bar"), [dec("display", "none")]),
+          rs(sel("from"), [dec("position", "relative")]),
+          rs(sel("to"), [dec("position", "relative")]),
+          rs(sel("a"), [dec("position", "relative")]),
           rs(sel("h1"), [dec("outline", "1px")])
         ])
       end
