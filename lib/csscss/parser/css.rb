@@ -19,14 +19,14 @@ module Csscss
 
         rule(:blank_attribute) { str(";") >> space? }
 
-        rule(:attribute_value) { (str('/*').absent? >> match["^;}"]) | raw_comment }
+        rule(:attribute_value) { (any_quoted {any}) | (str('/*').absent? >> match["^;}"]) | raw_comment }
 
         rule(:attribute) {
           match["^:{}"].repeat(1).as(:property) >>
           str(":") >>
           (
             (stri("data:").absent? >> attribute_value) |
-            (stri("data:").present? >> attribute_value.repeat(1) >> str(";") >> attribute_value.repeat(1))
+            (stri("data:").present? >> attribute_value.repeat(1) >> str(";") >> attribute_value.repeat(1)) 
           ).repeat(1).as(:value) >>
           str(";").maybe >>
           space?

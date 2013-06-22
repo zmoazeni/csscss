@@ -139,6 +139,14 @@ module Csscss::Parser
         @parser.url.must_parse "url(data:image/svg+xml;base64,IMGDATAGOESHERE4/5/h/1+==)"
         @parser.url.must_parse "url('data:image/svg+xml;base64,IMGDATAGOESHERE4/5/h/1+==')"
       end
+      
+      it "parses specials characters" do
+        @parser.between('"', '"') { @parser.symbol("{") }.must_parse '"{"'
+        @parser.between('"', '"') { @parser.symbol("}") }.must_parse '"}"'
+        @parser.between('"', '"') { @parser.symbol("%") }.must_parse '"%"'
+        @parser.double_quoted { @parser.symbol("{") }.must_parse %("{")
+        @parser.single_quoted { @parser.symbol('{') }.must_parse %('{')
+      end
     end
   end
 end
