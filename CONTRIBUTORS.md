@@ -4,3 +4,4 @@
 * Ivan Lazarevic @kopipejst
 * Matt DuVall @mduvall twitter:@mduvall_
 * Mekka Okereke @mekka @mekkaokereke
+* JoseLuis Torres @joseluistorres twitter:@joseluis_torres
