@@ -5,6 +5,7 @@
 * Fixes parsing bug with quoted brackets #72
 * Fixes parsing bug with nested media queries #73
 * Removes --compass-with-config deprecation
+* Adds a CONTRIBUTING.md file with instructions
 
 ## 1.3.1 - 4/20/2013 ##
 
