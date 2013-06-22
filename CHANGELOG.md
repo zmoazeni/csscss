@@ -1,6 +1,7 @@
 ## (Unreleased) ##
 
 * Fixes attribute parsing bug that includes comments with braces
+* Fixes parsing bug with empty media selectors
 
 ## 1.3.1 - 4/20/2013 ##
 
