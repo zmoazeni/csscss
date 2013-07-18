@@ -1,3 +1,7 @@
+(Unreleased)
+
+* Adds summary of total redundancy
+
 ## 1.3.2 - 6/22/2013 ##
 
 * Fixes attribute parsing bug that includes comments with braces
