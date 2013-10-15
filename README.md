@@ -65,7 +65,7 @@ jruby.
 
 ## Are there any community extensions? ##
 
-* [compass-csscss](https://github.com/Comcast/compass-csscss) integrates csscss with compass projects.
+* [compass-csscss](https://github.com/Comcast/compass-csscss) integrates [compass](http://compass-style.org/) with compass projects.
 * [grunt-csscss](https://github.com/peterkeating/grunt-csscss) a [grunt](http://gruntjs.com/) task to automatically run csscss.
 
 _Please submit [an issue](https://github.com/zmoazeni/csscss/issues/new) if you know of any others._
