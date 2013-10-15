@@ -63,6 +63,13 @@ LESS requires an additional javascript runtime.
 rubies, and [therubyrhino](https://rubygems.org/gems/therubyrhino) on
 jruby.
 
+## Are there any community extensions? ##
+
+* [compass-csscss](https://github.com/Comcast/compass-csscss) integrates csscss with compass projects.
+* [grunt-csscss](https://github.com/peterkeating/grunt-csscss) a [grunt](http://gruntjs.com/) task to automatically run csscss.
+
+_Please submit [an issue](https://github.com/zmoazeni/csscss/issues/new) if you know of any others._
+
 ## Why doesn't csscss automatically remove duplications for me? ##
 
 I have been asked this a lot, but csscss is intentionally designed this
