@@ -7,9 +7,11 @@ module Csscss
     def report(options = {})
       verbose      = options.fetch(:verbose, false)
       should_color = options.fetch(:color, true)
+      total_redundancy = 0
 
       io = StringIO.new
       @redundancies.each do |selector_groups, declarations|
+        total_redundancy+= 1
         selector_groups = selector_groups.map {|selectors| "{#{maybe_color(selectors, :red, should_color)}}" }
         last_selector = selector_groups.pop
         count = declarations.size
@@ -18,7 +20,7 @@ module Csscss
           declarations.each {|dec| io.puts("  - #{maybe_color(dec, :yellow, should_color)}") }
         end
       end
-
+      io.puts "\n\nTotal redundancy: #{total_redundancy}"
       io.rewind
       io.read
     end

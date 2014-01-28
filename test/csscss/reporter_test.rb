@@ -15,6 +15,9 @@ module Csscss
 {.foo} AND {.bar} share 2 rules
 {h1, h2}, {.foo} AND {.baz} share 1 rule
 {h1, h2} AND {.bar} share 1 rule
+
+
+Total redundancy: 3
 EXPECTED
      reporter.report(color:false).must_equal expected
 
@@ -26,13 +29,21 @@ EXPECTED
   - display: none
 {h1, h2} AND {.bar} share 1 rule
   - position: relative
+
+
+Total redundancy: 3
 EXPECTED
      reporter.report(verbose:true, color:false).must_equal expected
     end
 
     it "prints a new line if there is nothing" do
       reporter = Reporter.new({})
-      reporter.report().must_equal ""
+      expected =<<-EXPECTED
+
+
+Total redundancy: 0
+EXPECTED
+      reporter.report().must_equal expected
     end
   end
 end
