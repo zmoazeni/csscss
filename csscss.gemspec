@@ -19,6 +19,6 @@ Gem::Specification.new do |gem|
 
   gem.required_ruby_version = ">= 1.9"
 
-  gem.add_dependency "parslet", "~> 1.5"
+  gem.add_dependency "parslet", ">= 1.6.1", "< 2.0"
   gem.add_dependency "colorize"
 end
