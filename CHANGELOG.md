@@ -1,6 +1,7 @@
 ## (unreleased)
 
 * Upgrades parslet dependency to v1.6.1 and drops optimization monkeypatch
+* Use correct terminology "declartions" instead of "rules" in the output
 
 ## 1.3.2 - 6/22/2013 ##
 
