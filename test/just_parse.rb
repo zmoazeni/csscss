@@ -1,6 +1,6 @@
 #! /usr/bin/env ruby
 
-require "debugger"
+require "byebug"
 require "csscss"
 
 raise "need a file name" unless ARGV[0]
