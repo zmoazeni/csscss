@@ -297,9 +297,9 @@ module Csscss
       redundacyAnalyizer = RedundancyAnalyzer.new(cssForExactMatchedSelectors)
       redundancies = redundacyAnalyizer.redundancies
       redundacyAnalyizer.matchedSelectors.must_equal([
-        {:name=>"h1, h2", :count=>1},
-        {:name=>".joe", :count=>2},
-        {:name=>".baz", :count=>1}
+        {:name => "h1, h2", :count => 1},
+        {:name => ".joe", :count => 2},
+        {:name => ".baz", :count => 1}
         ])
     end
     # TODO: someday
