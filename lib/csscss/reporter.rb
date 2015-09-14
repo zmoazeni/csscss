@@ -1,7 +1,8 @@
 module Csscss
   class Reporter
-    def initialize(redundancies)
+    def initialize(redundancies, exactSelectors)
       @redundancies = redundancies
+	  @exactMatchSelectors = exactSelectors
     end
 
     def report(options = {})
@@ -18,6 +19,12 @@ module Csscss
           declarations.each {|dec| io.puts("  - #{maybe_color(dec, :yellow, should_color)}") }
         end
       end
+	  
+		@exactMatchSelectors.each do |selector|
+			if selector[:count] > 1
+				io.puts %Q({#{maybe_color(selector[:name], :red, should_color)}} repeated #{maybe_color(selector[:count], :red, should_color)} times )
+			end
+		end
 
       io.rewind
       io.read

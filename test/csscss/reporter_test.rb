@@ -9,7 +9,7 @@ module Csscss
         [sel(".foo"), sel(".bar")] => [dec("width", "1px"), dec("border", "black")],
         [sel("h1, h2"), sel(".foo"), sel(".baz")] => [dec("display", "none")],
         [sel("h1, h2"), sel(".bar")] => [dec("position", "relative")]
-      })
+      },[])
 
      expected =<<-EXPECTED
 {.foo} AND {.bar} share 2 declarations
@@ -31,7 +31,7 @@ EXPECTED
     end
 
     it "prints a new line if there is nothing" do
-      reporter = Reporter.new({})
+      reporter = Reporter.new({},[])
       reporter.report().must_equal ""
     end
   end
