@@ -1,3 +1,7 @@
+## Unreleased - 9/14/2015 ##
+
+* Added reporting exact matchs of selectors
+
 ## 1.3.3 - 5/30/2014 ##
 
 * Upgrades parslet dependency to v1.6.1 and drops optimization monkeypatch

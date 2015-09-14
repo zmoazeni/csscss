@@ -2,7 +2,7 @@ module Csscss
   class Reporter
     def initialize(redundancies, exactSelectors)
       @redundancies = redundancies
-	  @exactMatchSelectors = exactSelectors
+      @exactMatchSelectors = exactSelectors
     end
 
     def report(options = {})
