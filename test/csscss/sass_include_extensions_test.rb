@@ -61,7 +61,7 @@ h1 {
   /* CSSCSS END MIXIN: foo */ }
       CSS
 
-        Sass::Engine.new("@import '#{f.path}'", syntax: :scss, cache: false).render.must_equal(css)
+        Sass::Engine.new("@import '#{File.basename(f.path)}'", syntax: :scss, cache: false, load_paths: ["/tmp"]).render.must_equal(css)
       end
     end
   end
