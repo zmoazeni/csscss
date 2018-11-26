@@ -5,7 +5,6 @@ require "open-uri"
 
 require "colorize"
 require "parslet"
-require "csscss/parslet_optimizations"
 
 require "csscss/version"
 require "csscss/cli"

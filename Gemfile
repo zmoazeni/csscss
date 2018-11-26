@@ -4,16 +4,16 @@ source 'https://rubygems.org'
 gemspec
 
 # optional runtime dependencies
-gem "sass"
-gem "compass"
-gem "less"
-gem "therubyracer", :platform => :mri
+gem 'sass'
+gem 'compass'
+gem 'less'
+gem 'therubyracer', :platform => :mri
 
-gem "rake", :require => false
-gem "debugger"
+gem 'rake', :require => false
+gem 'byebug'
 
-gem "minitest"
-gem "m"
-gem "minitest-rg"
+gem 'minitest'
+gem 'm'
+gem 'minitest-rg'
 
-gem "ruby-prof"
+gem 'ruby-prof'

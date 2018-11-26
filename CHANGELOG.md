@@ -1,6 +1,16 @@
-## (Unreleased) ##
+## 1.3.3 - 5/30/2014 ##
+
+* Upgrades parslet dependency to v1.6.1 and drops optimization monkeypatch
+* Use correct terminology "declartions" instead of "rules" in the output
+
+## 1.3.2 - 6/22/2013 ##
 
 * Fixes attribute parsing bug that includes comments with braces
+* Fixes parsing bug with empty media selectors #67
+* Fixes parsing bug with quoted brackets #72
+* Fixes parsing bug with nested media queries #73
+* Removes --compass-with-config deprecation
+* Adds a CONTRIBUTING.md file with instructions
 
 ## 1.3.1 - 4/20/2013 ##
 

@@ -119,6 +119,15 @@ module Csscss::Parser
             }
           }
 
+          @media only screen {
+            @-webkit-keyframes webkitSiblingBugfix {
+              from { position: relative; }
+              to { position: relative; }
+            }
+
+            a { position: relative }
+          }
+
           h1 {
             outline: 1px;
           }
@@ -127,7 +136,31 @@ module Csscss::Parser
         trans(css).must_equal([
           rs(sel("#foo"), [dec("background-color", "black")]),
           rs(sel("#bar"), [dec("display", "none")]),
+          rs(sel("from"), [dec("position", "relative")]),
+          rs(sel("to"), [dec("position", "relative")]),
+          rs(sel("a"), [dec("position", "relative")]),
           rs(sel("h1"), [dec("outline", "1px")])
+        ])
+      end
+
+      it "recognizes empty @media queries with no spaces" do
+        css = %$
+          @media (min-width: 768px) and (max-width: 979px) {}
+        $
+
+        trans(css).must_equal([
+          rs(sel("@media (min-width: 768px) and (max-width: 979px)"), []),
+        ])
+      end
+
+      it "recognizes empty @media queries with spaces" do
+        css = %$
+          @media (min-width: 768px) and (max-width: 979px) {
+          }
+        $
+
+        trans(css).must_equal([
+          rs(sel("@media (min-width: 768px) and (max-width: 979px)"), []),
         ])
       end
 
@@ -210,6 +243,47 @@ module Csscss::Parser
                             dec("display", "block")]),
           rs(sel(".foo4"), [dec("background", "blue url(images/bg-bolt-inactive.png) no-repeat 99% 5px"),
                             dec("display", "block")])
+        ])
+      end
+
+      it "parses attributes with special characters" do
+        css = %$
+
+        #menu a::before {
+            content: "{";
+            left: -6px;
+        }
+
+        #menu a::after {
+            content: "}";
+            right: -6px;
+        }
+
+        #menu a::weird {
+            content: "@";
+            up: -2px;
+        }
+
+        #menu a::after_all {
+            content: '{';
+            right: -6px;
+        }
+
+        $
+
+        trans(css).must_equal([
+          rs(sel("#menu a::before"), [dec("content", '"{"'),
+            dec("left", "-6px")
+            ]),
+          rs(sel("#menu a::after"), [dec("content", '"}"'),
+            dec("right", "-6px")
+            ]),
+          rs(sel("#menu a::weird"), [dec("content", '"@"'),
+              dec("up", "-2px")
+            ]),
+          rs(sel("#menu a::after_all"), [dec("content", "'{'"),
+              dec("right", "-6px")
+            ])
         ])
       end
     end

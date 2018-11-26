@@ -1,11 +1,11 @@
-require "rubygems"
-require "bundler/setup"
+require 'rubygems'
+require 'bundler/setup'
 
-require "minitest/autorun"
-require "minitest/rg"
-require "debugger"
+require 'minitest/autorun'
+require 'minitest/rg'
+require 'byebug'
 
-require "csscss"
+require 'csscss'
 
 module TypeHelpers
   def sel(s)
