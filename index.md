@@ -76,7 +76,7 @@ _Please submit [an issue](https://github.com/zmoazeni/csscss/issues/new) if you 
 
 I have been asked this a lot, but csscss is intentionally designed this
 way. Check out [this
-post](http://connectionrequired.com/blog/2013/04/why-csscss-doesnt-remove-duplication-for-you/)
+post](https://connectionrequired.com/blog/2013/04/why-csscss-doesnt-remove-duplication-for-you)
 for my reasoning.
 
 ## I found bugs ##
@@ -87,12 +87,6 @@ If you find any issues, please report them on
 
 Please include the smallest CSS snippet to describe the issue and the
 output you expect to see.
-
-## Who are you? ##
-
-My name is [Zach Moazeni](https://twitter.com/zmoazeni). I work for [an
-awesome company](http://www.getharvest.com/). And [we're
-hiring!](http://www.getharvest.com/careers)
 
 ## I'm a dev, I can help ##
 
