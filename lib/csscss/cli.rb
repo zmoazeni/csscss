@@ -64,7 +64,7 @@ module Csscss
     end
 
     def parse(argv)
-      opts = OptionParser.new do |opts|
+      options = OptionParser.new do |opts|
         opts.banner  = "Usage: csscss [files..]"
         opts.version = Csscss::VERSION
 
@@ -128,11 +128,11 @@ module Csscss
           print_help(opts)
         end
       end
-      opts.parse!(argv)
+      options.parse!(argv)
 
-      print_help(opts) if argv.empty?
+      print_help(options) if argv.empty?
     rescue OptionParser::ParseError
-      print_help(opts)
+      print_help(options)
     end
 
     def print_help(opts)
