@@ -1,5 +1,5 @@
 module Csscss
-  class Declaration < Struct.new(:property, :value, :parents)
+  Declaration = Struct.new(:property, :value, :parents) do
     def self.from_csspool(dec)
       new(dec.property.to_s.downcase, dec.expressions.join(" ").downcase)
     end
@@ -79,7 +79,7 @@ module Csscss
     end
   end
 
-  class Selector < Struct.new(:selectors)
+  Selector = Struct.new(:selectors) do
     def self.from_parser(selectors)
       new(selectors.to_s.strip)
     end
@@ -97,6 +97,5 @@ module Csscss
     end
   end
 
-  class Ruleset < Struct.new(:selectors, :declarations)
-  end
+  Ruleset = Struct.new(:selectors, :declarations)
 end
