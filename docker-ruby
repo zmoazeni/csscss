@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run -it --rm -v $(pwd):/app -v csscss_gem_data:/usr/local/bundle -w /app ruby $@
