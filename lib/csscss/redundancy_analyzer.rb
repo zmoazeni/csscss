@@ -1,10 +1,28 @@
 # TODO: this class really needs some work. It works, but it is horrid.
 module Csscss
+
   class RedundancyAnalyzer
     def initialize(raw_css)
       @raw_css = raw_css
+      @matchedSelectors = []
     end
-
+    def matchedSelectors
+      return @matchedSelectors
+    end
+    def storeSelectors(selectors,newSelector)
+      added = false
+      if selectors != []
+        selectors.each do |selector|
+          if selector[:name] == newSelector
+            selector[:count] += 1
+            added = true
+          end
+        end 
+      end
+      if !added
+        selectors << { name: newSelector, count: 1}
+      end
+    end
     def redundancies(opts = {})
       minimum            = opts[:minimum]
       ignored_properties = opts[:ignored_properties] || []
@@ -17,7 +35,9 @@ module Csscss
       rule_sets.each do |rule_set|
         next if ignored_selectors.include?(rule_set.selectors.selectors)
         sel = rule_set.selectors
-
+        #store a count of all selectors
+        storeSelectors @matchedSelectors, sel[:selectors]
+		
         rule_set.declarations.each do |dec|
           next if ignored_properties.include?(dec.property)
 

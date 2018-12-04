@@ -285,8 +285,23 @@ module Csscss
         [sel(".bar"), sel(".foo")] => [dec("padding", "0")]
       })
     end
-
-
+    
+    it "finds selectors that are exactly the same .joe .joe" do 
+      cssForExactMatchedSelectors = %$
+        h1, h2 { display: none; position: relative; outline:none}
+        .joe { display: none; width: 1px }
+        .joe { position: relative; width: 1px; outline: none }
+        .baz { display: none }
+      $
+      
+      redundacyAnalyizer = RedundancyAnalyzer.new(cssForExactMatchedSelectors)
+      redundancies = redundacyAnalyizer.redundancies
+      redundacyAnalyizer.matchedSelectors.must_equal([
+        {:name => "h1, h2", :count => 1},
+        {:name => ".joe", :count => 2},
+        {:name => ".baz", :count => 1}
+        ])
+    end
     # TODO: someday
     # it "reports duplication within the same selector" do
     #   css = %$

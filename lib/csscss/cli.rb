@@ -37,17 +37,18 @@ module Csscss
       end.join("\n")
 
       unless all_contents.strip.empty?
-        redundancies = RedundancyAnalyzer.new(all_contents).redundancies(
+        redundancyAnalyzer = RedundancyAnalyzer.new(all_contents)
+        redundancies = redundancyAnalyzer.redundancies(
           minimum:            @minimum,
           ignored_properties: @ignored_properties,
           ignored_selectors:  @ignored_selectors,
           match_shorthand:    @match_shorthand
         )
-
+        exactSelectorMatches = redundancyAnalyzer.matchedSelectors
         if @json
-          puts JSONReporter.new(redundancies).report
+          puts JSONReporter.new(redundancies, exactSelectorMatches).report
         else
-          report = Reporter.new(redundancies).report(verbose:@verbose, color:@color)
+          report = Reporter.new(redundancies, exactSelectorMatches).report(verbose:@verbose, color:@color)
           puts report unless report.empty?
         end
       end
